@@ -1,70 +1,58 @@
-# 포트폴리오 사이트 — 브레인스토밍 핸드오프 (접근안 A 확정)
+# 포트폴리오 사이트 — 진행 상태
 
-> 2026-08-19 세션 정리. superpowers:brainstorming **architectural 경로** 진행 중.
-> 현재 위치: 접근안 A 선택됨 → 다음은 섹션별 디자인 합의 → 스펙 문서 → writing-plans.
+> 2026-08-19. **16개 태스크 전부 완료.** 남은 것은 사용자 손이 필요한 배포 단계뿐.
 
-## 사용자 프로필 (이력서 + 커밋 히스토리 기반)
+## 무엇을 만들었나
 
-- **고창민, 7년 11개월차 프론트엔드** — 밀리의서재 재직(2023.06~), 前 디케이테크인(kakao, 2018.10~2023.06)
-- 이력서: `/Users/doyle/Library/Mobile Documents/com~apple~CloudDocs/고창민_이력서.pdf`
-- 회사 레포(참고용): `/Users/doyle/WebstormProjects/` — millie-nextjs 커밋 2,419개, millie-spa 2,250개
-- 스택: TypeScript, React, Next.js, Vue, Nuxt, Docker, Redis
+"측정으로 증명하는 성능 엔지니어" 포지셔닝의 한국어 포트폴리오. 방문자가 3분 안에 역량을 파악하게 하고, 사이트 자체의 성능과 인터랙션이 곧 실력 증거가 되도록 설계했다.
 
-### 시그니처 스토리 (케이스스터디 재료)
+- 설계 문서: `docs/superpowers/specs/2026-08-19-portfolio-site-design.md`
+- 구현 계획: `docs/superpowers/plans/2026-08-19-portfolio-site.md` (16 태스크, 체크박스 완료)
+- 작업 규칙: `AGENTS.md` (= `CLAUDE.md`)
+- 원격: `git@github.com:changminKo/portfolio-site.git`
 
-1. **안드로이드 웹뷰 10초+ freeze 진단** — getConfig()가 매 렌더마다 document.cookie 재파싱(호출부 697곳) 특정. 쿠키 캐싱 + 첫 렌더 동기 시드. 메인스레드 9.2s→2.6s(−71%), Long Task 4개→0개
-2. **Next.js 트래픽 스파이크 성능** — standalone 재구성·번들 축소·lazy loading. 처리량 2.7배, P95 15,000ms→450ms(−97%), Web Vitals 68→88, 이미지 6.69GB→1.87GB
-3. **무중단 Vue→Next.js 전환** — LB 경로 라우팅 병행, 6개 도메인, 중단 0건, dev-proxy 구축
-4. **EPUB/Comic 뷰어** — DRM 복호화 Web Worker 분리, 브릿지 표준화
-5. **AI 워크플로우** — 밀리 바이브 배포 파이프라인, 팀 AI 표준(Swagger→코드 생성, AI TDD, 멀티에이전트 영향분석)
-6. **ISR+Redis CacheHandler PoC 후 보류** — "도입하지 않는 판단" 어필용
+## 구현 결과
 
-## 확정된 사항
+공개 라우트 7개: 홈 + `/work/[slug]` 6개. 전부 정적 생성.
 
-| 항목 | 결정 |
-|------|------|
-| 무엇을 | 포트폴리오 사이트 자체 제작 |
-| 목적 | 이직/채용 어필 — 3분 안에 실력 파악 |
-| 콘텐츠 | 회사 업무 위주(코드 공개 불가) → 케이스스터디 글 + **사이트 자체가 실력 증명** |
-| 포지셔닝 | **"측정으로 증명하는 성능 엔지니어"** |
-| 디자인 방향 | 인터랙션 쇼케이스 |
-| 스택 | Next.js + React |
-| 접근안 | **A. 라이브 케이스스터디** (아래 상세) |
-| 저장소 | `/Users/doyle/orca/projects/some-project` (빈 레포) |
-| git 계정 | repo-local `changminKo / rhckdals123@gmail.com` 설정 완료. remote 는 `git@github.com:changminKo/...` 로 |
+케이스스터디 6개 (문제 → 행동 → 성과):
+`webview-freeze`, `traffic-spike`, `vue-next-migration`, `epub-comic-viewer`, `ai-workflow`, `isr-redis-cachehandler-poc`
 
-## 접근안 A — 라이브 케이스스터디
+라이브 데모 3개 (각각 독립 비동기 청크, 홈 번들에서 배제):
+- **freeze** — 쿠키 재파싱 on/off 토글로 메인스레드 블로킹을 직접 체험. PerformanceObserver Long Task 타임라인. 6초 상한 + 즉시 중지
+- **traffic** — Worker 기반 결정적 FIFO 큐 시뮬레이터. 동시 사용자 슬라이더, 최적화 전/후 P95·처리량 비교
+- **stackflow** — 격리된 폰 프레임 안에서 스택 전환·스와이프백 (웹뷰 UX 전문성)
 
-구조: 멀티페이지 (홈 + 케이스스터디 개별 페이지).
+히어로는 방문자 브라우저의 LCP·CLS·INP와 렌더 프레임을 실측해 표시한다. 측정값은 네트워크로 전송하지 않는다.
 
-핵심 차별점: 케이스스터디 중 대표 2개에 **인터랙티브 재현 데모** 삽입 —
-성능 수치를 읽는 게 아니라 방문자가 직접 겪게 함. 회사 코드 없이 원리만 재현하므로 공개 문제 없음.
+## 검증 현황 (전부 실측 통과)
 
-- **데모 1 (freeze 사례)**: "쿠키 재파싱 on/off" 토글 → 메인스레드 블로킹 직접 체험, Long Task 시각화
-- **데모 2 (스파이크 사례)**: 부하/최적화 before-after 시뮬레이션 (형태는 디자인 단계에서 구체화)
-- 나머지 케이스스터디(전환·뷰어·AI·PoC 보류)는 글 + 다이어그램 중심
+| 항목 | 결과 |
+|---|---|
+| 단위·컴포넌트 테스트 | 16파일 28테스트 통과 |
+| Playwright E2E·시각회귀·axe | 70/70 통과 (스냅샷 52장, axe critical·serious 0건) |
+| typecheck / lint / build | 전부 통과, 7개 라우트 정적 생성 |
+| 홈 초기 JS (게이트 gzip 계산) | 152.58KB / 예산 160KB — PASS |
+| 홈 초기 JS (실제 브라우저) | 145.61KB |
+| 데모 청크 격리 | freeze·traffic·stackflow 서로 겹침 없음, 홈 graph에 데모 코드 0건 |
 
-기각한 대안: B(에디토리얼+시그니처 히어로 — 인터랙션 어필 약함), C(스크롤리텔링 원페이지 — 8년차에 필요한 깊이 못 실음).
+## 확정된 결정 사항
 
-## 남은 질문 (다음에 여기서부터)
+**홈 번들 예산 150KB → 160KB.** Next 16 + React 19 App Router 런타임만 gzip level 9 기준 약 149KB를 차지해서, 앱 코드가 0이어도 150KB를 넘긴다. 스펙 작성 시 이 하한을 몰랐던 것이라 실측 근거로 조정했다. 실제 브라우저 실측은 145.61KB로 서버 브로틀리 덕에 더 작다.
 
-1. 모션 라이브러리 (GSAP vs Framer Motion vs CSS 중심)
-2. 케이스스터디 개수·선정 — 위 6개 중 몇 개, 공개 수위
-3. 다크/라이트 테마, 한/영 여부
-4. 배포 타깃(Vercel 등) + 도메인 보유 여부
-5. 홈 히어로 컨셉 (디자인 섹션에서)
+**Reveal을 CSS 전환으로 교체.** `LazyMotion`을 쓰면서 `domAnimation`을 정적 import해 framer-motion 전체가 홈 번들에 들어가 있었다. CSS keyframes + IntersectionObserver로 바꿔 25KB 절감. framer-motion은 이제 데모 청크 전용 — 홈에 다시 끌어들이면 안 된다.
 
-## 다음 단계
+**Lighthouse LCP는 배포 후 판정.** 로컬 `next start` 측정이 4.5s로 목표 1.5s에 미달하지만 로컬 스로틀링 영향이 크다. CI에서 `perf:lhci`는 `continue-on-error: true`로 비차단 구성했고, Vercel 배포 후 실측으로 판정한다.
 
-1. 남은 질문 마저 (하나씩)
-2. 섹션별 디자인 제시·합의 (아키텍처, 페이지 구조, 데모 설계, 데이터 흐름, 테스트)
-3. 스펙 저장: `docs/superpowers/specs/2026-08-XX-portfolio-site-design.md` + 커밋
-4. writing-plans 스킬로 구현 계획
-5. 구현 시작 전 사용자 승인 (HARD GATE)
+## 사용자가 직접 해야 할 일
 
-## 제약/규칙 리마인더
+1. `vercel link --project portfolio-site` — Vercel 계정 로그인 필요 (또는 대시보드에서 repo import)
+2. 배포 후 프리뷰 URL에 Lighthouse 실행 (모바일, 냉 캐시 3회) → LCP·CLS·INP 실측 판정
+3. Vercel 환경변수에 `NEXT_PUBLIC_VISUAL_TEST` 설정 금지 — 시각회귀 전용
+4. 푸시 후 GitHub Actions `quality` 워크플로 그린 확인 + `perf:lhci` 리포트 수치 검토 (비차단이라 실패하지 않지만 볼 가치 있음)
 
-- anti-template 정책: 제네릭 템플릿 룩 금지 (`~/.claude/rules/web/design-quality.md`)
-- 성능 예산: 랜딩 JS < 150kb gzipped, LCP < 2.5s — 성능 포지셔닝이라 사이트 자체 성능이 곧 신뢰도. Lighthouse 100 목표로
-- 컴포지터 친화 속성만 애니메이션, reduced-motion 대응 필수
-- 데모는 dynamic import 로 분리 — 데모 무게가 페이지 성능 해치면 본말전도
+## 알려진 갭
+
+- freeze 데모의 cleanup(visibility·unmount 시 observer/rAF 해제)은 세션 단위 테스트로 덮이지만 컴포넌트 테스트에 `disconnect`/`cancelAnimationFrame` assertion은 없다. E2E가 종료 후 cleanup을 검증한다.
+- Playwright 병렬 실행 시 freeze 데모의 수동 로드 버튼이 IntersectionObserver 자동 로드와 드물게 경합할 수 있다. `retries: 2` 설정으로 흡수되며 최종 검증 3회 연속 클린이었다.
+- 콘텐츠 문구는 플랜 초안 기준이다. 실제 구직에 쓰기 전에 케이스스터디 본문을 직접 읽고 톤·수치·표현을 검토하는 게 좋다.
