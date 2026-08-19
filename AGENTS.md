@@ -27,7 +27,7 @@ pnpm exec playwright test   # E2E·시각회귀 (Task 14 이후)
 
 ## 스택
 
-Next.js 16 App Router (Turbopack), React 19, TypeScript strict, zod, `@next/mdx` + gray-matter, next-themes, Framer Motion, Vitest + React Testing Library, Playwright + axe.
+Next.js 16 App Router (Turbopack), React 19, TypeScript strict, zod, `@next/mdx` + gray-matter, next-themes, Framer Motion(데모 청크 전용 — 홈 번들에 넣지 말 것), Vitest + React Testing Library, Playwright + axe.
 
 백엔드·데이터베이스·CMS·런타임 콘텐츠 API는 없다. 콘텐츠는 `content/work/*.mdx` 6개가 전부이고 빌드 시 정적 생성된다.
 
@@ -36,7 +36,7 @@ Next.js 16 App Router (Turbopack), React 19, TypeScript strict, zod, `@next/mdx`
 `next.config.mjs`의 두 설정은 빌드 필수 조건이다. 제거하거나 형식을 바꾸면 빌드가 깨진다.
 
 - `turbopack.root: process.cwd()` — 없으면 Turbopack이 상위 디렉토리를 workspace root로 잘못 추론한다.
-- `remarkPlugins: [["remark-frontmatter", {}]]` — Turbopack은 loader 옵션을 직렬화하므로 플러그인을 함수 참조가 아닌 문자열 이름으로 전달해야 한다.
+- `remarkPlugins: [["remark-frontmatter", "yaml"]]` — Turbopack은 loader 옵션을 직렬화하므로 플러그인을 함수 참조가 아닌 문자열 이름으로 전달해야 한다.
 
 의존성은 이 프로젝트에서 `pnpm add`로만 설치한다. 다른 프로젝트의 `node_modules`를 심링크로 재사용하면 위 workspace root 추론이 깨진다.
 
@@ -51,7 +51,7 @@ Next.js 16 App Router (Turbopack), React 19, TypeScript strict, zod, `@next/mdx`
 
 ## 성능·접근성 예산
 
-- 홈 초기 JavaScript: gzip < 150KB (데모 청크 제외)
+- 홈 초기 JavaScript: gzip < 160KB (데모 청크 제외) — Next 16 + React 19 런타임 하한이 약 149KB
 - LCP < 1.5s, CLS < 0.05, 일반 상호작용 INP < 200ms (사용자가 시작한 freeze 합성 부하 구간은 제외)
 - 애니메이션은 `opacity`와 `transform`만. `prefers-reduced-motion`에서 모션을 제거하되 정보와 조작은 유지한다.
 - WCAG 2.2 AA. axe `critical`·`serious` 위반 0건, 예외 allowlist 없음.

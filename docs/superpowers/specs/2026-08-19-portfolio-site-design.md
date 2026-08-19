@@ -25,7 +25,7 @@
 - 첫 화면만 보고도 “측정으로 증명하는 성능 엔지니어”라는 포지셔닝과 대표 성과 2개를 이해할 수 있다.
 - 홈에서 6개 사례의 문제와 핵심 결과를 훑고, 각 상세 페이지로 이동할 수 있다.
 - freeze, traffic spike, 웹뷰 UX 데모를 회사 코드 없이 직접 조작할 수 있다.
-- 홈 초기 JavaScript는 데모 청크를 제외하고 gzip 기준 150KB 미만이며, 프로덕션 모바일 Lighthouse 측정에서 LCP 1.5초 미만과 Performance 100을 목표로 한다.
+- 홈 초기 JavaScript는 데모 청크를 제외하고 gzip 기준 160KB 미만이며(프레임워크 런타임 하한 약 149KB 실측 반영), 프로덕션 모바일 Lighthouse 측정에서 LCP 1.5초 미만과 Performance 100을 목표로 한다.
 - 키보드, 스크린 리더, `prefers-reduced-motion` 환경에서도 핵심 콘텐츠와 데모 결과에 접근할 수 있다.
 
 ### 운영 전제
@@ -425,7 +425,7 @@ H1을 단순히 매우 크게 만드는 것으로 끝내지 않고, 한글 본�
 
 | 항목 | 기준 | 측정 범위 |
 |---|---:|---|
-| 홈 초기 JavaScript | gzip `< 150KB` | shared + `/` 초기 청크; 세 데모 비동기 청크 제외 |
+| 홈 초기 JavaScript | gzip `< 160KB` | shared + `/` 초기 청크; 세 데모 비동기 청크 제외 |
 | LCP | `< 1.5s` | Vercel 프로덕션, Lighthouse 모바일 프로필, 냉 캐시 3회 중앙값 |
 | CLS | `< 0.05` | 홈과 6개 상세 페이지 |
 | INP | `< 200ms` | 실제 브라우저 일반 상호작용; 사용자가 시작한 freeze 합성 부하 구간 제외 |
@@ -502,7 +502,7 @@ Playwright 전용 빌드는 `NEXT_PUBLIC_VISUAL_TEST=1`을 사용한다. 이때 
 ### 성능·번들 회귀
 
 - Vercel과 같은 production build로 Lighthouse CI를 실행해 홈 LCP, CLS, Performance, Accessibility 예산을 확인한다.
-- 빌드 manifest에서 홈 초기 청크 gzip 합계가 150KB 미만인지 계산한다.
+- 빌드 manifest에서 홈 초기 청크 gzip 합계가 160KB 미만인지 계산한다.
 - 홈 초기 청크에 `features/demos`, `@stackflow`, `traffic.worker`가 없고, 각 데모가 서로 다른 비동기 청크인지 검사한다.
 - Lighthouse는 freeze 데모를 실행하지 않은 대기 상태에서 측정한다. 의도적 합성 부하 결과는 Vitest와 Playwright 기능 테스트로 따로 검증한다.
 
