@@ -3056,7 +3056,7 @@ git commit -m "feat: Worker 기반 traffic 시뮬레이터 구현"
 - Consumes: Task 8의 default dynamic target 규칙; `next-themes`; Stackflow v2의 `defineConfig`, `stackflow`, `useFlow`, `ActivityComponentType`.
 - Produces: module augmentation `Register { Shelf: Record<string, never>; Book: { bookId: string; title: string }; Reader: { bookId: string; title: string } }`; `StackflowStatusProvider({ children, animate }: PropsWithChildren<{ animate: boolean }>): JSX.Element`; `useStackflowStatus(): { animate: boolean; status: { depth: number; last: "대기" | "push" | "pop" }; report: (depth: number, last: "대기" | "push" | "pop") => void }`; `useSyncStackflowStatus(): void`; default `StackflowDemo(): JSX.Element` with marker `demo-chunk:stackflow`.
 
-- [ ] **Step 1: Stackflow 공식 패키지를 설치한다**
+- [x] **Step 1: Stackflow 공식 패키지를 설치한다**
 
 Run:
 
@@ -3066,7 +3066,7 @@ pnpm add @stackflow/config@latest @stackflow/core@latest @stackflow/react@latest
 
 Expected: five `@stackflow` packages are added to `dependencies` and lockfile resolution exits 0.
 
-- [ ] **Step 2: 격리·상태 설명의 실패 테스트를 작성한다**
+- [x] **Step 2: 격리·상태 설명의 실패 테스트를 작성한다**
 
 Create `tests/components/stackflow-demo.test.tsx`:
 
@@ -3089,13 +3089,13 @@ it("폰 프레임 안에 Stack과 텍스트 상태를 렌더한다", () => {
 });
 ```
 
-- [ ] **Step 3: 초기 marker UI가 폰 프레임 요구를 충족하지 못해 실패하는지 확인한다**
+- [x] **Step 3: 초기 marker UI가 폰 프레임 요구를 충족하지 못해 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/stackflow-demo.test.tsx`
 
 Expected: FAIL because the initial component has no phone frame or stack status.
 
-- [ ] **Step 4: Activity 타입과 350ms config를 정의한다**
+- [x] **Step 4: Activity 타입과 350ms config를 정의한다**
 
 Create `src/features/demos/stackflow/stackflow.config.ts`:
 
@@ -3117,7 +3117,7 @@ export const stackflowConfig = defineConfig({
 });
 ```
 
-- [ ] **Step 5: stack depth·마지막 전환 context를 구현한다**
+- [x] **Step 5: stack depth·마지막 전환 context를 구현한다**
 
 Create `src/features/demos/stackflow/StackflowStatus.tsx`:
 
@@ -3153,7 +3153,7 @@ export function useSyncStackflowStatus(): void {
 }
 ```
 
-- [ ] **Step 6: 서재·책 상세·리더 Activity를 구현한다**
+- [x] **Step 6: 서재·책 상세·리더 Activity를 구현한다**
 
 Create `src/features/demos/stackflow/ShelfActivity.tsx`:
 
@@ -3206,7 +3206,7 @@ export const ReaderActivity: ActivityComponentType<"Reader"> = ({ params }) => {
 };
 ```
 
-- [ ] **Step 7: basic renderer와 Cupertino UI로 Stack 인스턴스를 만든다**
+- [x] **Step 7: basic renderer와 Cupertino UI로 Stack 인스턴스를 만든다**
 
 Create `src/features/demos/stackflow/stackflow.instance.tsx`:
 
@@ -3226,7 +3226,7 @@ export const { Stack } = stackflow({
 });
 ```
 
-- [ ] **Step 8: 테마·reduced-motion과 격리 폰 프레임을 구현한다**
+- [x] **Step 8: 테마·reduced-motion과 격리 폰 프레임을 구현한다**
 
 Replace `src/features/demos/stackflow/StackflowDemo.tsx`:
 
@@ -3267,7 +3267,7 @@ Create `src/features/demos/stackflow/stackflow-demo.module.css`:
 .demo[data-reduced-motion="true"] .phone * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 ```
 
-- [ ] **Step 9: Stackflow 데모와 전체 타입 검사를 통과시킨다**
+- [x] **Step 9: Stackflow 데모와 전체 타입 검사를 통과시킨다**
 
 Run:
 
@@ -3280,7 +3280,7 @@ pnpm build
 
 Expected: Stackflow test passes, build exits 0, and `@stackflow` remains reachable only through the stackflow dynamic target.
 
-- [ ] **Step 10: Stackflow 데모를 커밋한다**
+- [x] **Step 10: Stackflow 데모를 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml src/features/demos/stackflow tests/components/stackflow-demo.test.tsx

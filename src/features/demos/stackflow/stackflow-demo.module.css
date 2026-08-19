@@ -1,0 +1,4 @@
+.demo { display: grid; justify-items: center; gap: var(--space-3); isolation: isolate; }
+.phone { width: min(360px, 100%); height: min(720px, 75dvh); overflow: clip; contain: layout paint style; border: 8px solid var(--text); border-radius: var(--phone-radius); background: var(--surface); }
+.phone button { min-width: 44px; min-height: 44px; }
+.demo[data-reduced-motion="true"] .phone * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
