@@ -23,6 +23,8 @@ cardSize: large
 
 <div data-wide role="img" aria-label="697개 호출부에서 getConfig와 document.cookie 재파싱을 거쳐 Long Task가 발생하고, 캐시와 동기 시드로 경로를 줄이는 흐름"><code>697 호출부 → getConfig() → document.cookie 재파싱 → Long Task<br />697 호출부 → 캐시 읽기 + 첫 렌더 동기 시드 → 즉시 반환</code></div>
 
+<DemoSlot kind="freeze" />
+
 ## 성과
 
 메인스레드 점유는 9.2초에서 2.6초로 71% 감소했고 Long Task는 4개에서 0개가 됐습니다. 공개 데모는 실제 쿠키가 아니라 64KB 합성 문자열로 같은 원리만 재현합니다.

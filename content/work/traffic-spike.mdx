@@ -24,6 +24,8 @@ Next.js standalone 배포를 재구성하고 서버 번들을 축소했습니다
 
 <div data-wide role="img" aria-label="요청 큐가 축소된 standalone 서버 번들과 지연 로딩 정적 자산으로 분기되는 최적화 구조"><code>요청 큐 → standalone 서버 → 축소된 server bundle<br />브라우저 → 핵심 route chunk + 필요 시 lazy chunk → 최적화 이미지</code></div>
 
+<DemoSlot kind="traffic" />
+
 ## 성과
 
 처리량은 2.7배, P95는 15,000ms에서 450ms로 개선됐습니다. Web Vitals 점수는 68에서 88, 이미지 용량은 6.69GB에서 1.87GB로 줄었습니다. 데모의 값은 실측 재생이 아니라 결정적 가상 큐의 출력입니다.

@@ -1,0 +1,2 @@
+.slot { margin-block: var(--space-16); padding: var(--space-6); border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--surface); }
+.slot button { min-width: 44px; min-height: 44px; color: var(--bg); border: 0; border-radius: var(--card-radius); background: var(--text); padding-inline: var(--space-4); }

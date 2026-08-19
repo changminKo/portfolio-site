@@ -1905,7 +1905,7 @@ git commit -m "feat: 브라우저 실측 성능 히어로 구현"
 - Consumes: Task 3의 `DemoKind` 중 `Exclude<DemoKind, "none">`; Task 6의 MDX mapping.
 - Produces: `DemoKind = "freeze" | "traffic" | "stackflow"`; `DemoObserver = (node: Element, onEnter: () => void) => () => void`; `DemoComponents = Record<DemoKind, ComponentType>`; `createDemoObserver(): DemoObserver`; `DemoSlot({ kind, observe?, components? }): JSX.Element`; literal dynamic loaders for three default exports; 격리된 오류와 재시도 UI.
 
-- [ ] **Step 1: 명시적 클릭 전 import 금지의 실패 테스트를 작성한다**
+- [x] **Step 1: 명시적 클릭 전 import 금지의 실패 테스트를 작성한다**
 
 Create `tests/components/demo-slot.test.tsx`:
 
@@ -1948,13 +1948,13 @@ it("데모 오류를 본문에서 격리하고 재시도 control을 제공한다
 });
 ```
 
-- [ ] **Step 2: DemoSlot 부재로 실패하는지 확인한다**
+- [x] **Step 2: DemoSlot 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/demo-slot.test.tsx`
 
 Expected: FAIL with an import resolution error for `DemoSlot`.
 
-- [ ] **Step 3: 세 동적 대상의 독립 marker 컴포넌트를 만든다**
+- [x] **Step 3: 세 동적 대상의 독립 marker 컴포넌트를 만든다**
 
 Create the initial default exports:
 
@@ -1975,7 +1975,7 @@ export default function StackflowDemo() {
 }
 ```
 
-- [ ] **Step 4: 데모 오류 경계를 구현한다**
+- [x] **Step 4: 데모 오류 경계를 구현한다**
 
 Create `src/components/mdx/DemoErrorBoundary.tsx`:
 
@@ -2002,7 +2002,7 @@ export class DemoErrorBoundary extends Component<
 }
 ```
 
-- [ ] **Step 5: observer와 `next/dynamic` DemoSlot을 구현한다**
+- [x] **Step 5: observer와 `next/dynamic` DemoSlot을 구현한다**
 
 Create `src/components/mdx/DemoSlot.tsx`:
 
@@ -2069,7 +2069,7 @@ Create `src/components/mdx/demo-slot.module.css`:
 .slot button { min-width: 44px; min-height: 44px; color: var(--bg); border: 0; border-radius: var(--card-radius); background: var(--text); padding-inline: var(--space-4); }
 ```
 
-- [ ] **Step 6: DemoSlot을 MDX mapping과 세 본문에 연결한다**
+- [x] **Step 6: DemoSlot을 MDX mapping과 세 본문에 연결한다**
 
 Replace `mdx-components.tsx`:
 
@@ -2106,7 +2106,7 @@ Insert the exact line immediately before `## 성과` in `content/work/epub-comic
 <DemoSlot kind="stackflow" />
 ```
 
-- [ ] **Step 7: 지연 로딩 테스트와 정적 빌드를 통과시킨다**
+- [x] **Step 7: 지연 로딩 테스트와 정적 빌드를 통과시킨다**
 
 Run:
 
@@ -2119,7 +2119,7 @@ pnpm build
 
 Expected: DemoSlot test passes, build exits 0, and three dynamic component chunks are emitted.
 
-- [ ] **Step 8: 동적 데모 경계를 커밋한다**
+- [x] **Step 8: 동적 데모 경계를 커밋한다**
 
 ```bash
 git add src/components/mdx src/features/demos mdx-components.tsx content/work/webview-freeze.mdx content/work/traffic-spike.mdx content/work/epub-comic-viewer.mdx tests/components/demo-slot.test.tsx

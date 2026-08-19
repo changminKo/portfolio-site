@@ -22,6 +22,8 @@ DRM 복호화를 Web Worker로 옮겨 계산 경계를 분리했습니다. 네�
 
 <div data-wide role="img" aria-label="메인스레드가 DRM Worker와 메시지를 주고받고 공통 브릿지가 Android와 iOS 네이티브 컨테이너를 연결하는 구조"><code>Main Thread ↔ DRM Web Worker<br />Main Thread ↔ 공통 Bridge ↔ Android / iOS Container</code></div>
 
+<DemoSlot kind="stackflow" />
+
 ## 성과
 
 복호화 연산과 인터랙션 경로가 분리되고 웹·네이티브 통신의 단일 계약이 생겼습니다. 확인되지 않은 효과는 숫자로 만들지 않고 구조와 책임 경계를 증거로 제시합니다.
