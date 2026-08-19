@@ -10,7 +10,7 @@
 
 .footer { padding-block: var(--space-8); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; }
 
-.nav { display: flex; min-height: 44px; align-items: center; gap: var(--space-4); }
+.nav { display: flex; min-height: 44px; align-items: center; gap: var(--space-2); }
 
 .brand {
   display: inline-flex;
@@ -29,9 +29,13 @@
     display: inline-flex;
     min-height: 44px;
     align-items: center;
+    padding-inline: var(--space-3);
+    border-radius: 999px;
     color: var(--muted);
     font-size: 0.9rem;
     text-decoration: none;
   }
-  .nav > a:not(.brand):hover, .nav > a:not(.brand):focus-visible { color: var(--text); }
+  /* 마지막 링크와 테마 스위치 사이에만 간격을 둔다 */
+  .nav > a:not(.brand):last-of-type { margin-right: var(--space-3); }
+  .nav > a:not(.brand):hover { color: var(--text); background: var(--accent-soft); }
 }

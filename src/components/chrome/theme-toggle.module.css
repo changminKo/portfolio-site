@@ -1,0 +1,57 @@
+/*
+ * 계측 장비의 모드 스위치. 눌린 상태 하나만 표면을 올려 현재 값을 읽게 하고,
+ * 나머지는 배경에 눕힌다.
+ */
+
+.group {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-deep);
+}
+
+.option {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  padding-inline: var(--space-3);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.option:hover { color: var(--text); }
+
+/* 선택된 모드만 표면 위로 올라온다 */
+.option[aria-pressed="true"] {
+  background: var(--surface-raised);
+  color: var(--text);
+  box-shadow: var(--shadow-card);
+}
+
+.option:focus-visible { outline-offset: 1px; }
+
+/*
+ * 44px 터치 타깃은 그룹 바깥으로 넘치지 않게 버튼의 클릭 영역을 확장해 확보한다.
+ * 시각 높이는 34px로 유지해 헤더가 두꺼워지지 않는다.
+ */
+.option::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+.option { position: relative; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .option { transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out); }
+}

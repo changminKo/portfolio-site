@@ -2,6 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import styles from "./theme-toggle.module.css";
 
 const themes = [
   ["system", "시스템"],
@@ -15,14 +16,14 @@ export function ThemeToggle() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <div role="group" aria-label="색상 테마" data-mounted={mounted}>
+    <div className={styles.group} role="group" aria-label="색상 테마" data-mounted={mounted}>
       {themes.map(([value, label]) => (
         <button
           key={value}
+          className={styles.option}
           type="button"
           aria-pressed={mounted && theme === value}
           onClick={() => setTheme(value)}
-          style={{ minWidth: 44, minHeight: 44 }}
         >
           {label}
         </button>
