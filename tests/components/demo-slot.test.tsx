@@ -6,7 +6,6 @@ const neverEnter: DemoObserver = () => () => undefined;
 const components: DemoComponents = {
   freeze: () => <div data-testid="freeze-demo">freeze</div>,
   traffic: () => <div data-testid="traffic-demo">traffic</div>,
-  stackflow: () => <div data-testid="stackflow-demo">stackflow</div>,
 };
 
 it("초기 셸을 렌더하고 버튼 입력 뒤 해당 데모만 표시한다", async () => {

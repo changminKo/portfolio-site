@@ -4,8 +4,8 @@ import { gzipSync } from "node:zlib";
 
 const nextDir = join(process.cwd(), ".next");
 const chunkRoot = join(nextDir, "static", "chunks");
-const markers = ["demo-chunk:freeze", "demo-chunk:traffic", "demo-chunk:stackflow"];
-const forbiddenInHome = ["features/demos", "@stackflow", "traffic.worker", ...markers];
+const markers = ["demo-chunk:freeze", "demo-chunk:traffic"];
+const forbiddenInHome = ["features/demos", "traffic.worker", ...markers];
 // Next.js 16 + React 19 App Router 런타임만 약 149KB(gzip level 9)를 차지한다.
 // 이 스크립트의 gzip 계산은 보수적이다 — 실제 프로덕션 서버는 브로틀리로 협상하므로
 // 브라우저가 받는 실측 encodedBodySize는 더 작다(tests/e2e/performance-budget.spec.ts 기준 145KB).
@@ -23,7 +23,7 @@ async function files(directory) {
   ).flat();
 }
 
-// 1) 세 데모가 서로 다른 비동기 청크에 있는지 검사한다.
+// 1) 두 데모가 서로 다른 비동기 청크에 있는지 검사한다.
 // Turbopack은 같은 dynamic import() 호출부라도 진입 라우트(홈 vs work/[slug])별로
 // 물리 청크 파일을 다르게 생성할 수 있으므로(react-loadable-manifest로 확인됨),
 // marker당 파일이 정확히 1개라고 가정하지 않고 "marker 간 파일 집합이 서로 겹치지 않는지"를 검사한다.

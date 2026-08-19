@@ -6,7 +6,7 @@
 
 이 사이트는 7년 11개월차 프론트엔드 엔지니어 고창민의 이직·채용용 한국어 포트폴리오다. 핵심 포지셔닝은 **“측정으로 증명하는 성능 엔지니어”**이며, 방문자가 3분 안에 다음 세 가지를 확인하게 한다.
 
-선정한 방향은 **접근안 A: 라이브 케이스스터디**다. 깊이 있는 멀티페이지 글과 세 가지 원리 재현 데모를 결합하며, 에디토리얼 쇼케이스나 원페이지 스크롤 연출보다 실무 문제 해결의 근거를 우선한다.
+선정한 방향은 **접근안 A: 라이브 케이스스터디**다. 깊이 있는 멀티페이지 글과 두 가지 원리 재현 데모를 결합하며, 에디토리얼 쇼케이스나 원페이지 스크롤 연출보다 실무 문제 해결의 근거를 우선한다.
 
 1. 웹과 웹뷰의 성능 병목을 재현하고 측정할 수 있다.
 2. 대규모 전환·뷰어·개발 워크플로우처럼 여러 시스템이 얽힌 문제를 끝까지 해결한다.
@@ -24,7 +24,7 @@
 
 - 첫 화면만 보고도 “측정으로 증명하는 성능 엔지니어”라는 포지셔닝과 대표 성과 2개를 이해할 수 있다.
 - 홈에서 6개 사례의 문제와 핵심 결과를 훑고, 각 상세 페이지로 이동할 수 있다.
-- freeze, traffic spike, 웹뷰 UX 데모를 회사 코드 없이 직접 조작할 수 있다.
+- freeze, traffic spike 데모를 회사 코드 없이 직접 조작할 수 있다.
 - 홈 초기 JavaScript는 데모 청크를 제외하고 gzip 기준 160KB 미만이며(프레임워크 런타임 하한 약 149KB 실측 반영), 프로덕션 모바일 Lighthouse 측정에서 LCP 1.5초 미만과 Performance 100을 목표로 한다.
 - 키보드, 스크린 리더, `prefers-reduced-motion` 환경에서도 핵심 콘텐츠와 데모 결과에 접근할 수 있다.
 
@@ -46,7 +46,7 @@
 | `/work/webview-freeze` | 웹뷰 freeze 진단 과정 설명 | 문제→행동→성과, 원인 흐름도, 실측 지표 | 쿠키 재파싱 freeze |
 | `/work/traffic-spike` | Next.js 트래픽 대응 설명 | 문제→행동→성과, 병목·배포 구조, 실측 지표 | 가상 요청 큐 |
 | `/work/vue-next-migration` | 무중단 프레임워크 전환 설명 | 문제→행동→성과, LB 경로 라우팅 다이어그램 | 없음 |
-| `/work/epub-comic-viewer` | 뷰어·웹뷰 통합 전문성 설명 | 문제→행동→성과, Worker·브릿지 경계도 | Stackflow 웹뷰 UX |
+| `/work/epub-comic-viewer` | 뷰어·웹뷰 통합 전문성 설명 | 문제→행동→성과, Worker·브릿지 경계도 | 없음 |
 | `/work/ai-workflow` | 반복 가능한 AI 개발 체계 설명 | 문제→행동→성과, 배포·생성·검증 파이프라인 | 없음 |
 | `/work/isr-redis-cachehandler-poc` | 도입 보류 의사결정 설명 | 문제→행동→성과, 판단 기준 매트릭스 | 없음 |
 
@@ -127,7 +127,7 @@
 - **홈 카드:** 대형 데모 카드, 대표 결과 `DRM 작업 분리 · 브릿지 표준화`
 - **문제:** EPUB/Comic 렌더링, DRM 복호화, 네이티브 웹뷰 통신이 한 실행 경로에 얽히면 무거운 연산이 UI 반응성을 떨어뜨리고 플랫폼별 브릿지 차이가 기능 구현에 누적됐다.
 - **행동:** DRM 복호화를 Web Worker로 옮겨 메인스레드와 계산 경계를 분리하고, 네이티브 호출·응답 계약을 공통 브릿지로 표준화했다. 본문에는 메인스레드, Worker, 네이티브 컨테이너 사이의 메시지 흐름과 실패 경계를 표시한다.
-- **성과:** 복호화 연산과 인터랙션 경로가 분리되고 웹·네이티브 통신의 단일 계약이 만들어졌다. 수치가 확인되지 않은 효과는 숫자로 꾸미지 않으며, 구조적 성과와 책임 경계를 증거로 사용한다. Stackflow 미니 데모는 폰 프레임 안에서 화면 스택과 스와이프백을 직접 보여 줘 웹뷰·하이브리드 UX 역량을 보완한다.
+- **성과:** 복호화 연산과 인터랙션 경로가 분리되고 웹·네이티브 통신의 단일 계약이 만들어졌다. 수치가 확인되지 않은 효과는 숫자로 꾸미지 않으며, 구조적 성과와 책임 경계를 증거로 사용한다.
 
 ### 3.5 팀 AI 워크플로우 표준화
 
@@ -145,11 +145,11 @@
 - **행동:** Redis CacheHandler PoC로 캐시 읽기·쓰기 경로를 구성하고, 기대 이득뿐 아니라 운영 복잡도, 장애 전파 범위, 관측 가능성, 롤백 비용을 같은 의사결정 매트릭스에서 평가했다.
 - **성과:** 구현 가능하다는 이유만으로 도입하지 않고 PoC 이후 채택을 보류했다. 본문은 확인되지 않은 성능 수치를 만들지 않으며, “도입”보다 문제 적합성과 운영 비용을 우선한 판단 과정 자체를 시니어 엔지니어링 성과로 제시한다.
 
-## 4. 데모 3개 상세 설계
+## 4. 데모 2개 상세 설계
 
 ### 공통 데모 경계와 로딩 규칙
 
-`DemoSlot`은 MDX가 사용하는 유일한 공통 인터페이스이며 `kind: "freeze" | "traffic" | "stackflow"`만 받는다. 이 컴포넌트의 초기 출력은 제목, 설명, 예상 동작, `데모 불러오기` 버튼을 포함한 가벼운 서버 렌더 셸이다. 작은 클라이언트 래퍼가 다음 중 먼저 발생한 시점에 해당 데모만 불러온다.
+`DemoSlot`은 MDX가 사용하는 유일한 공통 인터페이스이며 `kind: "freeze" | "traffic"`만 받는다. 이 컴포넌트의 초기 출력은 제목, 설명, 예상 동작, `데모 불러오기` 버튼을 포함한 가벼운 서버 렌더 셸이다. 작은 클라이언트 래퍼가 다음 중 먼저 발생한 시점에 해당 데모만 불러온다.
 
 1. 사용자가 `데모 불러오기`를 누른다.
 2. 데모 셸이 뷰포트 200px 이내로 들어온다.
@@ -160,9 +160,8 @@
 |---|---|---|
 | `freeze` | `features/demos/freeze/FreezeDemo` | freeze UI, 합성 부하, 관찰 로직 전부 |
 | `traffic` | `features/demos/traffic/TrafficSpikeDemo` | traffic UI와 차트; Worker는 별도 worker 청크 |
-| `stackflow` | `features/demos/stackflow/StackflowDemo` | Stackflow 패키지, Activity, 전용 스타일 전부 |
 
-각 대상은 `next/dynamic`의 `ssr: false`와 고정된 로딩 셸을 사용한다. 이 방식은 세 데모가 서로 다른 비동기 청크가 되게 하고, 홈과 데모 없는 케이스스터디의 초기 의존 그래프에서 제거한다. 데모가 있는 상세 페이지에서도 뷰포트 접근 또는 명시적 버튼 입력 전에는 실제 데모 청크를 요청하지 않는다.
+각 대상은 `next/dynamic`의 `ssr: false`와 고정된 로딩 셸을 사용한다. 이 방식은 두 데모가 서로 다른 비동기 청크가 되게 하고, 홈과 데모 없는 케이스스터디의 초기 의존 그래프에서 제거한다. 데모가 있는 상세 페이지에서도 뷰포트 접근 또는 명시적 버튼 입력 전에는 실제 데모 청크를 요청하지 않는다.
 
 데모끼리 상태를 공유하지 않으며 전역 상태 라이브러리를 도입하지 않는다. 각 데모는 로컬 `useReducer`와 순수 시뮬레이션 함수로 상태를 관리한다. 실행 중 페이지가 숨겨지거나 컴포넌트가 unmount되면 timer, observer, animation frame, Worker를 모두 정리한다. 데모 오류는 해당 셸 안의 오류 상태와 `다시 불러오기`로 격리하며 페이지 본문 탐색은 계속 가능해야 한다.
 
@@ -234,33 +233,6 @@
 
 Worker는 `new Worker(new URL("./traffic.worker.ts", import.meta.url), { type: "module" })` 경계로 별도 출력하고, 페이지를 나갈 때 `terminate()`한다. Canvas는 정보의 유일한 표현이 아니며 같은 값을 표와 텍스트로 제공한다. `prefers-reduced-motion`에서는 보간 없이 1Hz로 점만 갱신한다.
 
-### 4.3 Stackflow 웹뷰 UX 미니 데모
-
-#### 사용자 경험
-
-- 위치: `/work/epub-comic-viewer`의 브릿지·Worker 구조 설명 다음.
-- 360×720 기준의 반응형 폰 프레임 안에 `서재`, `책 상세`, `리더` 세 Activity를 넣는다.
-- 사용자는 책 카드를 눌러 상세와 리더를 순서대로 push하고, 상단 뒤로가기 또는 화면 왼쪽 가장자리의 스와이프백으로 pop할 수 있다.
-- 프레임 아래에는 현재 stack depth와 마지막 전환(`push` 또는 `pop`)을 텍스트로 표시해 동작을 눈으로만 판단하지 않게 한다.
-- 라이트/다크 테마가 사이트와 동기화되며, reduced motion에서는 전환 시간을 0ms로 바꾸고 화면 상태만 즉시 교체한다.
-
-#### 컴포넌트와 패키지 경계
-
-당근이 제작한 Stackflow의 공식 설치 구성에 맞춰 `@stackflow/config`, `@stackflow/core`, `@stackflow/react`, `@stackflow/plugin-renderer-basic`, `@stackflow/plugin-basic-ui`를 사용한다. 패키지와 기본 UI 스타일은 모두 `StackflowDemo` 비동기 청크 내부에서만 참조한다. Activity는 `ShelfActivity`, `BookActivity`, `ReaderActivity` 세 개로 제한하고 가상 책 데이터 3개를 모듈 내부 상수로 제공한다. Stackflow 공식 설치 구성은 [공식 설치 문서](https://stackflow.so/docs/get-started/installation)를 기준으로 한다.
-
-| 단위 | 책임 |
-|---|---|
-| `StackflowDemo` | 폰 프레임, 테마, reduced-motion, 상태 설명 |
-| `stackflow.config` | Activity 이름, 파라미터, 기본 전환 350ms 정의 |
-| `stackflow.instance` | 세 Activity와 basic renderer/UI plugin 결합 |
-| `ShelfActivity` | 책 목록과 상세 push |
-| `BookActivity` | 책 정보와 리더 push |
-| `ReaderActivity` | 뷰어 모형과 pop 동작 |
-
-폰 프레임은 `isolation: isolate`, `contain: layout paint style`, `overflow: clip`을 적용하고 전용 CSS layer와 CSS Module로 사이트 스타일과 구분한다. 프레임 높이는 작은 화면에서 `min(720px, 75dvh)`로 줄어들며, 내부에 focus가 갇히지 않는다.
-
-Stackflow는 이 미니 데모의 내부 상태 전환에만 사용한다. 사이트 헤더, 홈 앵커, `/work/[slug]` 이동은 모두 Next.js App Router 링크가 담당한다. 두 라우터를 결합할 때 생기는 SEO·SSR 수명주기와 URL 소유권 충돌을 피하기 위해 메인 내비게이션에서 Stackflow 사용을 금지한다.
-
 ## 5. 기술 아키텍처
 
 ### 기술 선택
@@ -312,7 +284,6 @@ Stackflow는 이 미니 데모의 내부 상태 전환에만 사용한다. 사�
 │   │   └── demos/
 │   │       ├── freeze/            # FreezeDemo, observer, 순수 파서
 │   │       ├── traffic/           # TrafficSpikeDemo, engine, worker, chart
-│   │       └── stackflow/         # StackflowDemo, config, Activity, 전용 스타일
 │   ├── lib/
 │   │   ├── performance/           # Web Vitals와 frame meter
 │   │   └── a11y/                  # motion·announcement 공통 도우미
@@ -340,8 +311,8 @@ Stackflow는 이 미니 데모의 내부 상태 전환에만 사용한다. 사�
 - `title`, `summary`, `role`, `period`: 한국어 문자열.
 - `stack`: 카드와 상세 상단에 쓰는 문자열 배열.
 - `evidence`: `{ label, before?, after?, value?, unit? }[]`; 확인된 실제 성과만 기록한다.
-- `demo`: `freeze`, `traffic`, `stackflow`, `none` 중 하나.
-- `cardSize`: 데모 3개는 `large`, 나머지는 `standard`로 고정한다.
+- `demo`: `freeze`, `traffic`, `none` 중 하나.
+- `cardSize`: 데모가 있는 사례는 `large`, 나머지는 `standard`로 고정한다.
 
 `@next/mdx`는 `remark-frontmatter`로 YAML 블록을 인식하고, 서버 전용 콘텐츠 loader가 `gray-matter`로 메타데이터를 읽는다. `work.schema.ts`가 중복 slug, 누락 필드, 잘못된 demo/cardSize 조합을 빌드 오류로 처리한다. `work.registry.ts`는 메타데이터와 정적 MDX loader를 한곳에서 제공하므로 홈 카드, 정적 경로, 이전/다음 링크가 서로 다른 목록을 갖지 않는다.
 
@@ -351,7 +322,7 @@ Stackflow는 이 미니 데모의 내부 상태 전환에만 사용한다. 사�
 2. 요청에는 정적 HTML, 테마 초기화 스크립트, 해당 페이지의 최소 클라이언트 아일랜드만 전달한다.
 3. 홈에서는 `LiveBrowserMetrics`가 hydration 후 실제 브라우저 지표를 관찰한다. 측정값은 네트워크로 보내지 않는다.
 4. 상세 페이지의 `DemoSlot`은 뷰포트 접근 또는 버튼 입력 후 한 종류의 데모 청크만 import한다.
-5. freeze는 현재 탭에서 제한된 합성 부하를, traffic은 Worker에서 결정적 큐 모델을, Stackflow는 격리된 폰 컨테이너에서 로컬 화면 스택을 실행한다.
+5. freeze는 현재 탭에서 제한된 합성 부하를, traffic은 Worker에서 결정적 큐 모델을 실행한다.
 
 ### 오류와 복구
 
@@ -414,7 +385,7 @@ H1을 단순히 매우 크게 만드는 것으로 끝내지 않고, 한글 본�
 ### 모션 원칙
 
 - Framer Motion은 `LazyMotion`으로 로드하고 `opacity`와 `transform`만 애니메이션한다.
-- 일반 reveal은 180–320ms, Stackflow 데모 내부 전환은 350ms를 넘지 않는다.
+- 일반 reveal은 180–320ms를 넘지 않는다.
 - width, height, top, left, box-shadow blur를 프레임별로 애니메이션하지 않는다.
 - scroll 위치에 종속된 장시간 패럴랙스는 사용하지 않는다.
 - `prefers-reduced-motion: reduce`에서는 reveal을 즉시 최종 상태로 만들고, 자동 스크롤·보간·스와이프 애니메이션을 제거한다. 정보와 조작 자체는 그대로 유지한다.
@@ -425,14 +396,14 @@ H1을 단순히 매우 크게 만드는 것으로 끝내지 않고, 한글 본�
 
 | 항목 | 기준 | 측정 범위 |
 |---|---:|---|
-| 홈 초기 JavaScript | gzip `< 160KB` | shared + `/` 초기 청크; 세 데모 비동기 청크 제외 |
+| 홈 초기 JavaScript | gzip `< 160KB` | shared + `/` 초기 청크; 두 데모 비동기 청크 제외 |
 | LCP | `< 1.5s` | Vercel 프로덕션, Lighthouse 모바일 프로필, 냉 캐시 3회 중앙값 |
 | CLS | `< 0.05` | 홈과 6개 상세 페이지 |
 | INP | `< 200ms` | 실제 브라우저 일반 상호작용; 사용자가 시작한 freeze 합성 부하 구간 제외 |
 | Lighthouse | Performance 100 목표 | 홈 프로덕션 빌드, 모바일 프로필 |
 | 접근성 점수 | 100 | 홈과 6개 상세 페이지 |
 
-- 홈은 데모 패키지, Stackflow, traffic Worker를 import graph에 포함하지 않는다. 빌드 manifest로 이를 검증한다.
+- 홈은 데모 패키지와 traffic Worker를 import graph에 포함하지 않는다. 빌드 manifest로 이를 검증한다.
 - 서버 컴포넌트를 기본으로 하고 클라이언트 지시문은 `ThemeToggle`, `LiveBrowserMetrics`, motion 경계, `DemoSlot`과 실제 데모 내부에만 둔다.
 - 히어로 LCP 후보는 텍스트로 유지한다. 첫 화면에 대형 이미지나 동영상을 두지 않는다.
 - 정적 이미지는 크기를 명시하고 `next/image`의 AVIF/WebP, `sizes`, 지연 로딩을 사용한다. 첫 화면 밖 이미지만 lazy load한다.
@@ -471,7 +442,7 @@ H1을 단순히 매우 크게 만드는 것으로 끝내지 않고, 한글 본�
 
 - `LiveBrowserMetrics`가 `측정 중`→숫자, `입력 전`, `미지원` 상태를 레이아웃 이동 없이 표시하는지 검증한다.
 - `DemoSlot`이 초기에는 실제 데모를 import하지 않고 버튼 또는 intersection 이후 한 종류만 import하는지 검증한다.
-- 세 데모의 label, keyboard control, reduced-motion 분기, 오류·재시도 상태를 React Testing Library로 검증한다.
+- 두 데모의 label, keyboard control, reduced-motion 분기, 오류·재시도 상태를 React Testing Library로 검증한다.
 - 테마 선택이 system/light/dark 사이에서 일관되고 hydration 전후 접근 가능한 이름이 바뀌지 않는지 검증한다.
 
 ### Playwright 기능·시각회귀
@@ -488,9 +459,8 @@ Playwright 전용 빌드는 `NEXT_PUBLIC_VISUAL_TEST=1`을 사용한다. 이때 
 
 - freeze: idle, 재파싱 완료, 캐시 완료, API 미지원.
 - traffic: 동시 사용자 1,500의 최적화 전/후를 같은 seed로 실행한 상태.
-- Stackflow: 서재, 책 상세, 리더, reduced-motion 상태.
 
-기능 E2E는 홈 앵커, 6개 상세 링크, 이전/다음 사례, 테마 유지, 404, 세 데모의 핵심 조작, 데모 종료 후 cleanup을 검증한다. Stackflow는 버튼 push/pop과 pointer swipe-back을 각각 검사하고, 메인 브라우저 URL이 데모 조작으로 바뀌지 않는 것도 확인한다.
+기능 E2E는 홈 앵커, 6개 상세 링크, 이전/다음 사례, 테마 유지, 404, 두 데모의 핵심 조작, 데모 종료 후 cleanup을 검증한다.
 
 ### 자동 접근성 검사
 
@@ -503,12 +473,12 @@ Playwright 전용 빌드는 `NEXT_PUBLIC_VISUAL_TEST=1`을 사용한다. 이때 
 
 - Vercel과 같은 production build로 Lighthouse CI를 실행해 홈 LCP, CLS, Performance, Accessibility 예산을 확인한다.
 - 빌드 manifest에서 홈 초기 청크 gzip 합계가 160KB 미만인지 계산한다.
-- 홈 초기 청크에 `features/demos`, `@stackflow`, `traffic.worker`가 없고, 각 데모가 서로 다른 비동기 청크인지 검사한다.
+- 홈 초기 청크에 `features/demos`, `traffic.worker`가 없고, 각 데모가 서로 다른 비동기 청크인지 검사한다.
 - Lighthouse는 freeze 데모를 실행하지 않은 대기 상태에서 측정한다. 의도적 합성 부하 결과는 Vitest와 Playwright 기능 테스트로 따로 검증한다.
 
 ## 9. 비범위(non-goals)
 
-- Stackflow를 사이트의 메인 내비게이션, URL 라우팅, 페이지 전환에 사용하지 않는다. `/`와 `/work/[slug]`는 Next.js App Router가 소유한다.
+- 스택 내비게이션 라이브러리를 도입하지 않는다. `/`와 `/work/[slug]`의 라우팅은 Next.js App Router가 소유한다. 웹뷰 UX 미니 데모는 성능 서사와 무관해 2026-08-20에 범위에서 제외했다.
 - 영문판과 언어 전환 UI를 만들지 않는다. 콘텐츠, 메타데이터, 접근성 레이블은 한국어 단일이다.
 - CMS, 관리자 화면, 데이터베이스, 런타임 콘텐츠 API를 만들지 않는다. 6개 케이스스터디는 저장소의 MDX로 관리한다.
 - 별도 `/about` 페이지를 만들지 않는다. 프로필과 경력은 홈에 포함한다.

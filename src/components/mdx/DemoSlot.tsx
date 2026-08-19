@@ -13,7 +13,6 @@ export type DemoComponents = Record<DemoKind, ComponentType>;
 const dynamicDemos: DemoComponents = {
   freeze: dynamic(() => import("@/features/demos/freeze/FreezeDemo"), { ssr: false, loading: () => <p>freeze 데모 로딩 중</p> }),
   traffic: dynamic(() => import("@/features/demos/traffic/TrafficSpikeDemo"), { ssr: false, loading: () => <p>traffic 데모 로딩 중</p> }),
-  stackflow: dynamic(() => import("@/features/demos/stackflow/StackflowDemo"), { ssr: false, loading: () => <p>Stackflow 데모 로딩 중</p> }),
 } as const;
 
 export function createDemoObserver(): DemoObserver {

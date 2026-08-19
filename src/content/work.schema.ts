@@ -10,7 +10,7 @@ export const WORK_SLUGS = [
 ] as const;
 
 export type WorkSlug = (typeof WORK_SLUGS)[number];
-export type DemoKind = "freeze" | "traffic" | "stackflow" | "none";
+export type DemoKind = "freeze" | "traffic" | "none";
 
 const EvidenceSchema = z.object({
   label: z.string().min(1),
@@ -35,7 +35,7 @@ export const WorkMetaSchema = z.object({
   period: z.string().min(1),
   stack: z.array(z.string().min(1)).min(1),
   evidence: z.array(EvidenceSchema).min(1),
-  demo: z.enum(["freeze", "traffic", "stackflow", "none"]),
+  demo: z.enum(["freeze", "traffic", "none"]),
   cardSize: z.enum(["large", "standard"]),
 }).superRefine((work, context) => {
   const expected = work.demo === "none" ? "standard" : "large";

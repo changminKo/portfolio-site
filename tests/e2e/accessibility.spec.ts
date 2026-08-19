@@ -12,11 +12,10 @@ for (const route of routes) for (const theme of ["light", "dark"] as const) {
   });
 }
 
-test("세 데모 대표 상태에 serious·critical axe 위반이 없다", async ({ page }) => {
+test("두 데모 대표 상태에 serious·critical axe 위반이 없다", async ({ page }) => {
   const demos = [
     ["/work/webview-freeze", "freeze"],
     ["/work/traffic-spike", "traffic"],
-    ["/work/epub-comic-viewer", "stackflow"],
   ] as const;
   for (const [route, name] of demos) {
     await page.goto(route);

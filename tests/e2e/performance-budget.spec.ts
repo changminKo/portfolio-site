@@ -12,8 +12,6 @@ test("홈 초기 gzip JavaScript가 160KB 미만이고 데모 marker가 없다",
   expect(result.encodedBodySize).toBeLessThan(160 * 1024);
   expect(result.source).not.toContain("demo-chunk:freeze");
   expect(result.source).not.toContain("demo-chunk:traffic");
-  expect(result.source).not.toContain("demo-chunk:stackflow");
-  expect(result.source).not.toContain("@stackflow");
   expect(result.source).not.toContain("features/demos");
   expect(result.source).not.toContain("traffic.worker");
 });

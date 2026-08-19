@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-async function loadDemo(page: Page, name: "freeze" | "traffic" | "stackflow") {
+async function loadDemo(page: Page, name: "freeze" | "traffic") {
   const loader = page.getByRole("button", { name: `${name} 데모 불러오기` });
   if (await loader.isVisible().catch(() => false)) await loader.click({ timeout: 2000 }).catch(() => {});
   await expect(page.getByTestId(`${name}-demo`)).toBeVisible();
@@ -63,17 +63,3 @@ for (const model of ["before", "after"] as const) {
     await expect(page.getByTestId("traffic-demo")).toHaveScreenshot(`traffic-${model}.png`, { animations: "disabled" });
   });
 }
-
-test("Stackflow 서재·상세·리더·reduced-motion 상태", async ({ page }) => {
-  await page.goto("/work/epub-comic-viewer");
-  await loadDemo(page, "stackflow");
-  const demo = page.getByTestId("stackflow-demo");
-  await expect(demo).toHaveScreenshot("stackflow-shelf.png", { animations: "disabled" });
-  await page.getByRole("button", { name: "브라우저 성능 읽기" }).click();
-  await expect(demo).toHaveScreenshot("stackflow-book.png", { animations: "disabled" });
-  await page.getByRole("button", { name: "읽기 시작" }).click();
-  await expect(demo).toHaveScreenshot("stackflow-reader.png", { animations: "disabled" });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(demo).toHaveAttribute("data-reduced-motion", "true");
-  await expect(demo).toHaveScreenshot("stackflow-reduced-motion.png", { animations: "disabled" });
-});

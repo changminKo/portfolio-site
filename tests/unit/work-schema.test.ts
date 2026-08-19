@@ -5,7 +5,7 @@ const base: WorkMeta[] = [
   ["webview-freeze", 1, "freeze", "large"],
   ["traffic-spike", 2, "traffic", "large"],
   ["vue-next-migration", 3, "none", "standard"],
-  ["epub-comic-viewer", 4, "stackflow", "large"],
+  ["epub-comic-viewer", 4, "none", "standard"],
   ["ai-workflow", 5, "none", "standard"],
   ["isr-redis-cachehandler-poc", 6, "none", "standard"],
 ].map(([slug, order, demo, cardSize]) => ({

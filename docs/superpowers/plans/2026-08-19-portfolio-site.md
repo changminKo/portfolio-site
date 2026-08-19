@@ -3039,6 +3039,10 @@ git commit -m "feat: Worker 기반 traffic 시뮬레이터 구현"
 
 ### Task 13: 격리된 Stackflow 웹뷰 UX 데모 구현
 
+> **[2026-08-20 철회]** 이 태스크의 산출물은 제거했다. 스택 내비게이션 UX 데모는
+> "측정으로 증명하는 성능 엔지니어" 포지셔닝과 무관해 초점을 흐린다는 판단이었다.
+> 아래 내용은 이력으로 남긴다. 현재 데모는 freeze·traffic 두 개다.
+
 **Spec coverage:** 4.3절 폰 프레임·세 Activity·스와이프백·상태 텍스트·테마·reduced motion, 9절 메인 내비게이션 금지
 
 **Files:**
