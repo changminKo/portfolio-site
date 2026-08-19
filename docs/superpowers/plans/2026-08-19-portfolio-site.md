@@ -1456,7 +1456,7 @@ git commit -m "feat: 포지셔닝 홈과 bento 작업 목록 구현"
 - Consumes: Task 3의 `WorkMeta`, `WorkSlug`, `isWorkSlug`; Task 4의 `workItems`, `getWork`, `getAdjacentWorks`, `loadWork`.
 - Produces: `EvidenceMetric({ evidence }: { evidence: Evidence }): JSX.Element`; `SimulationMetric({ label, value, unit }: { label: string; value: number; unit: string }): JSX.Element`; `CaseStudyLayout(props: { work: WorkMeta; previous: WorkMeta | null; next: WorkMeta | null; children: ReactNode }): JSX.Element`; `generateStaticParams(): { slug: WorkSlug }[]`; 6개 정적 상세 페이지.
 
-- [ ] **Step 1: 사례 레이아웃의 실패 테스트를 작성한다**
+- [x] **Step 1: 사례 레이아웃의 실패 테스트를 작성한다**
 
 Create `tests/components/case-study-layout.test.tsx`:
 
@@ -1480,13 +1480,13 @@ it("실측 지표와 문제→행동→성과 본문, 이전·다음 링크를 �
 });
 ```
 
-- [ ] **Step 2: 사례 레이아웃 부재로 실패하는지 확인한다**
+- [x] **Step 2: 사례 레이아웃 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/case-study-layout.test.tsx`
 
 Expected: FAIL with an import resolution error for `CaseStudyLayout`.
 
-- [ ] **Step 3: 실제·시뮬레이션 지표 컴포넌트를 구현한다**
+- [x] **Step 3: 실제·시뮬레이션 지표 컴포넌트를 구현한다**
 
 Create `src/components/work/EvidenceMetric.tsx` and `src/components/work/SimulationMetric.tsx`:
 
@@ -1508,7 +1508,7 @@ export function SimulationMetric({ label, value, unit }: { label: string; value:
 }
 ```
 
-- [ ] **Step 4: 공통 사례 레이아웃과 스타일을 구현한다**
+- [x] **Step 4: 공통 사례 레이아웃과 스타일을 구현한다**
 
 Create `src/components/work/CaseStudyLayout.tsx`:
 
@@ -1566,7 +1566,7 @@ Create `src/components/work/work.module.css`:
 @media (min-width: 768px) { .header, .prose, .adjacent { width: min(var(--reading-width), calc(100% - 64px)); } }
 ```
 
-- [ ] **Step 5: MDX 전역 매핑을 작성한다**
+- [x] **Step 5: MDX 전역 매핑을 작성한다**
 
 Run: `pnpm add -D @types/mdx@latest`
 
@@ -1585,7 +1585,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-- [ ] **Step 6: 정적 상세 route와 404를 구현한다**
+- [x] **Step 6: 정적 상세 route와 404를 구현한다**
 
 Create `src/app/work/[slug]/page.tsx`:
 
@@ -1630,7 +1630,7 @@ export default function NotFound() {
 }
 ```
 
-- [ ] **Step 7: 6개 정적 사례와 레이아웃을 검증한다**
+- [x] **Step 7: 6개 정적 사례와 레이아웃을 검증한다**
 
 Run:
 
