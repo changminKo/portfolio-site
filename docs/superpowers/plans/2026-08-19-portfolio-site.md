@@ -1643,7 +1643,7 @@ pnpm build
 
 Expected: tests pass, build exits 0, and build output contains the six `/work/...` paths plus `/`.
 
-- [ ] **Step 8: 케이스스터디 페이지를 커밋한다**
+- [x] **Step 8: 케이스스터디 페이지를 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml mdx-components.tsx src/components/work src/app/work src/app/not-found.tsx tests/components/case-study-layout.test.tsx
