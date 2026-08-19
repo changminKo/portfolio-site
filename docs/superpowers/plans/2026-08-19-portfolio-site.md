@@ -611,7 +611,7 @@ git commit -m "feat: 디자인 토큰과 테마 기반 구현"
 - Consumes: Zod.
 - Produces: `WORK_SLUGS: readonly WorkSlug[]`; `WorkSlug`; `DemoKind = "freeze" | "traffic" | "stackflow" | "none"`; `Evidence`; `WorkMeta`; `WorkMetaSchema`; `isWorkSlug(value: string): value is WorkSlug`; `validateWorkCollection(records: readonly unknown[]): readonly WorkMeta[]` sorted by `order`.
 
-- [ ] **Step 1: Zod와 스키마 실패 테스트를 추가한다**
+- [x] **Step 1: Zod와 스키마 실패 테스트를 추가한다**
 
 Run: `pnpm add zod@latest`
 
@@ -658,13 +658,13 @@ describe("validateWorkCollection", () => {
 });
 ```
 
-- [ ] **Step 2: 스키마 모듈 부재로 실패하는지 확인한다**
+- [x] **Step 2: 스키마 모듈 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/unit/work-schema.test.ts`
 
 Expected: FAIL with an import resolution error for `@/content/work.schema`.
 
-- [ ] **Step 3: 타입과 단일 레코드 검증을 구현한다**
+- [x] **Step 3: 타입과 단일 레코드 검증을 구현한다**
 
 Create `src/content/work.schema.ts`:
 
@@ -737,7 +737,7 @@ export function validateWorkCollection(records: readonly unknown[]): readonly Wo
 }
 ```
 
-- [ ] **Step 4: 스키마 테스트와 타입 검사를 통과시킨다**
+- [x] **Step 4: 스키마 테스트와 타입 검사를 통과시킨다**
 
 Run:
 
@@ -748,7 +748,7 @@ pnpm typecheck
 
 Expected: 3 tests pass and typecheck exits 0.
 
-- [ ] **Step 5: 콘텐츠 계약을 커밋한다**
+- [x] **Step 5: 콘텐츠 계약을 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml src/content/work.schema.ts tests/unit/work-schema.test.ts
