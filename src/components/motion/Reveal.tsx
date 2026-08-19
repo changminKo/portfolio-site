@@ -1,20 +1,46 @@
 "use client";
 
-import { domAnimation, LazyMotion, m, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import styles from "./reveal.module.css";
+
+const VIEWPORT_RATIO = 0.2;
 
 export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
-  const reduceMotion = useReducedMotion();
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element) {
+      return;
+    }
+
+    if (typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: VIEWPORT_RATIO },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <LazyMotion features={domAnimation} strict>
-      <m.div
-        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: reduceMotion ? 0 : 0.24, delay }}
-      >
-        {children}
-      </m.div>
-    </LazyMotion>
+    <div
+      ref={elementRef}
+      className={isVisible ? `${styles.reveal} ${styles.visible}` : styles.reveal}
+      style={delay > 0 ? { "--reveal-delay": `${delay * 1000}ms` } as React.CSSProperties : undefined}
+    >
+      {children}
+    </div>
   );
 }
