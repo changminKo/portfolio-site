@@ -777,7 +777,7 @@ git commit -m "feat: 케이스스터디 콘텐츠 스키마 추가"
 - Consumes: Task 3의 `WorkMeta`, `WorkSlug`, `WORK_SLUGS`, `isWorkSlug`, `validateWorkCollection`.
 - Produces: `workItems: readonly WorkMeta[]`; `getWork(slug: WorkSlug): WorkMeta`; `getAdjacentWorks(slug: WorkSlug): { previous: WorkMeta | null; next: WorkMeta | null }`; `loadWork(slug: WorkSlug): Promise<{ default: ComponentType }>`; `loadWorkModule(slug: WorkSlug): Promise<{ default: ComponentType }>`; YAML frontmatter를 가진 MDX 6개.
 
-- [ ] **Step 1: 레지스트리 통합 실패 테스트를 작성한다**
+- [x] **Step 1: 레지스트리 통합 실패 테스트를 작성한다**
 
 Create `tests/unit/work-registry.test.ts`:
 
@@ -802,13 +802,13 @@ describe("work registry", () => {
 });
 ```
 
-- [ ] **Step 2: 레지스트리 부재로 실패하는지 확인한다**
+- [x] **Step 2: 레지스트리 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/unit/work-registry.test.ts`
 
 Expected: FAIL with an import resolution error for `@/content/work.registry`.
 
-- [ ] **Step 3: MDX 도구와 Next 설정을 추가한다**
+- [x] **Step 3: MDX 도구와 Next 설정을 추가한다**
 
 Run:
 
@@ -865,7 +865,7 @@ declare module "*.mdx" {
 }
 ```
 
-- [ ] **Step 4: freeze·traffic MDX를 실제 내용으로 작성한다**
+- [x] **Step 4: freeze·traffic MDX를 실제 내용으로 작성한다**
 
 Create `content/work/webview-freeze.mdx`:
 
@@ -934,7 +934,7 @@ Next.js standalone 배포를 재구성하고 서버 번들을 축소했습니다
 처리량은 2.7배, P95는 15,000ms에서 450ms로 개선됐습니다. Web Vitals 점수는 68에서 88, 이미지 용량은 6.69GB에서 1.87GB로 줄었습니다. 데모의 값은 실측 재생이 아니라 결정적 가상 큐의 출력입니다.
 ```
 
-- [ ] **Step 5: migration·viewer MDX를 실제 내용으로 작성한다**
+- [x] **Step 5: migration·viewer MDX를 실제 내용으로 작성한다**
 
 Create `content/work/vue-next-migration.mdx`:
 
@@ -1001,7 +1001,7 @@ DRM 복호화를 Web Worker로 옮겨 계산 경계를 분리했습니다. 네�
 복호화 연산과 인터랙션 경로가 분리되고 웹·네이티브 통신의 단일 계약이 생겼습니다. 확인되지 않은 효과는 숫자로 만들지 않고 구조와 책임 경계를 증거로 제시합니다.
 ```
 
-- [ ] **Step 6: AI·ISR MDX를 실제 내용으로 작성한다**
+- [x] **Step 6: AI·ISR MDX를 실제 내용으로 작성한다**
 
 Create `content/work/ai-workflow.mdx`:
 
@@ -1072,7 +1072,7 @@ PoC로 캐시 읽기·쓰기 경로를 구성하고 기대 이득, 운영 복잡
 구현 가능하다는 이유만으로 도입하지 않고 채택을 보류했습니다. 확인되지 않은 성능 수치를 만들지 않고 문제 적합성과 운영 비용을 우선한 판단 과정을 성과로 제시합니다.
 ```
 
-- [ ] **Step 7: frontmatter 레지스트리와 정적 loader를 구현한다**
+- [x] **Step 7: frontmatter 레지스트리와 정적 loader를 구현한다**
 
 Create `src/content/work.registry.ts`:
 
@@ -1126,7 +1126,7 @@ export function loadWorkModule(slug: WorkSlug): Promise<WorkModule> {
 }
 ```
 
-- [ ] **Step 8: 레지스트리와 콘텐츠 검사를 통과시킨다**
+- [x] **Step 8: 레지스트리와 콘텐츠 검사를 통과시킨다**
 
 Run:
 
@@ -1138,7 +1138,7 @@ pnpm typecheck
 
 Expected: 5 tests pass and lint/typecheck exit 0.
 
-- [ ] **Step 9: MDX 콘텐츠 기반을 커밋한다**
+- [x] **Step 9: MDX 콘텐츠 기반을 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml next.config.mjs vitest.config.ts content/work src/content/work.registry.ts src/content/work.loaders.ts src/types/mdx.d.ts tests/unit/work-registry.test.ts
