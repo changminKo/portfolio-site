@@ -100,7 +100,7 @@
 - Consumes: 없음. 저장소에는 스펙과 계획 문서만 있다고 가정한다.
 - Produces: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:run`, `pnpm test:e2e` 스크립트; `@/* -> ./src/*` 경로 alias; jsdom 기반 Vitest 환경; Chromium 기반 Playwright 환경.
 
-- [ ] **Step 1: 런타임과 Git 명의를 검증한다**
+- [x] **Step 1: 런타임과 Git 명의를 검증한다**
 
 Run:
 
@@ -112,7 +112,7 @@ git config --local user.email
 
 Expected: Node.js는 `v20.9.0` 이상, 이름은 `changminKo`, 이메일은 `rhckdals123@gmail.com`이다.
 
-- [ ] **Step 2: 앱과 테스트 의존성을 설치한다**
+- [x] **Step 2: 앱과 테스트 의존성을 설치한다**
 
 Run:
 
@@ -130,7 +130,7 @@ pnpm pkg set scripts.dev="next dev" scripts.build="next build" scripts.start="ne
 
 Expected: `package.json`과 `pnpm-lock.yaml`이 생성되고 Chromium 설치가 종료 코드 0으로 끝난다.
 
-- [ ] **Step 3: TypeScript·Next·Vitest·Playwright 설정을 작성한다**
+- [x] **Step 3: TypeScript·Next·Vitest·Playwright 설정을 작성한다**
 
 Create `tsconfig.json`:
 
@@ -231,7 +231,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 4: 첫 페이지의 실패 테스트를 작성한다**
+- [x] **Step 4: 첫 페이지의 실패 테스트를 작성한다**
 
 Create `tests/components/home-page.test.tsx`:
 
@@ -248,13 +248,13 @@ it("핵심 포지셔닝을 하나의 H1으로 렌더한다", () => {
 });
 ```
 
-- [ ] **Step 5: 테스트가 페이지 부재로 실패하는지 확인한다**
+- [x] **Step 5: 테스트가 페이지 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/home-page.test.tsx`
 
 Expected: FAIL with an import resolution error for `@/app/page`.
 
-- [ ] **Step 6: 최소 App Router 페이지를 구현한다**
+- [x] **Step 6: 최소 App Router 페이지를 구현한다**
 
 Create `src/app/layout.tsx`:
 
@@ -294,7 +294,7 @@ test-results/
 !.env.example
 ```
 
-- [ ] **Step 7: 기반 검사를 통과시킨다**
+- [x] **Step 7: 기반 검사를 통과시킨다**
 
 Run:
 
@@ -307,7 +307,7 @@ pnpm build
 
 Expected: 1 test passes, lint/typecheck/build exit 0, build output lists `/` as a static route, and `next-env.d.ts` is generated.
 
-- [ ] **Step 8: 프로젝트 기반을 커밋한다**
+- [x] **Step 8: 프로젝트 기반을 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml tsconfig.json next.config.mjs eslint.config.mjs vitest.config.ts playwright.config.ts tests/setup.ts tests/components/home-page.test.tsx src/app/layout.tsx src/app/page.tsx next-env.d.ts .gitignore
