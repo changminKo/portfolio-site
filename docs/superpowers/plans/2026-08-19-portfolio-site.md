@@ -1165,7 +1165,7 @@ git commit -m "feat: 여섯 개 케이스스터디 콘텐츠 추가"
 - Consumes: Task 2의 `Reveal`, 전역 토큰; Task 3의 `WorkMeta`; Task 4의 `workItems: readonly WorkMeta[]`.
 - Produces: `Hero({ metrics? }: { metrics?: ReactNode }): JSX.Element`; `WorkBento({ items }: { items: readonly WorkMeta[] }): JSX.Element`; `CareerTimeline(): JSX.Element`; `Contact(): JSX.Element`; 홈의 고정 section id `work`, `career`, `contact`.
 
-- [ ] **Step 1: 홈 구조의 실패 테스트를 작성한다**
+- [x] **Step 1: 홈 구조의 실패 테스트를 작성한다**
 
 Create `tests/components/home-sections.test.tsx`:
 
@@ -1181,13 +1181,13 @@ it("히어로 다음에 작업·경력·연락처를 렌더한다", () => {
 });
 ```
 
-- [ ] **Step 2: 여섯 카드가 없어 실패하는지 확인한다**
+- [x] **Step 2: 여섯 카드가 없어 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/home-sections.test.tsx`
 
 Expected: FAIL because the six case-study links are absent.
 
-- [ ] **Step 3: Hero와 WorkBento를 구현한다**
+- [x] **Step 3: Hero와 WorkBento를 구현한다**
 
 Create `src/components/home/Hero.tsx`:
 
@@ -1253,7 +1253,7 @@ export function WorkBento({ items }: { items: readonly WorkMeta[] }) {
 }
 ```
 
-- [ ] **Step 4: 경력과 연락처 섹션을 구현한다**
+- [x] **Step 4: 경력과 연락처 섹션을 구현한다**
 
 Create `src/components/home/CareerTimeline.tsx`:
 
@@ -1315,7 +1315,7 @@ export function Contact() {
 }
 ```
 
-- [ ] **Step 5: 12열 bento와 반응형 홈 스타일을 구현한다**
+- [x] **Step 5: 12열 bento와 반응형 홈 스타일을 구현한다**
 
 Create `src/components/home/home.module.css`:
 
@@ -1361,7 +1361,7 @@ Create `src/components/home/home.module.css`:
 @media (prefers-reduced-motion: no-preference) { .card { transition: transform 180ms ease; } }
 ```
 
-- [ ] **Step 6: chrome 스타일과 홈 조합을 연결한다**
+- [x] **Step 6: chrome 스타일과 홈 조합을 연결한다**
 
 Create `src/components/chrome/chrome.module.css`:
 
@@ -1418,7 +1418,7 @@ export default function HomePage() {
 }
 ```
 
-- [ ] **Step 7: 홈 검사를 통과시킨다**
+- [x] **Step 7: 홈 검사를 통과시킨다**
 
 Run:
 
@@ -1431,7 +1431,7 @@ pnpm build
 
 Expected: 2 home tests pass, build exits 0, and `/` remains static.
 
-- [ ] **Step 8: 홈 정적 UI를 커밋한다**
+- [x] **Step 8: 홈 정적 UI를 커밋한다**
 
 ```bash
 git add src/components/home src/components/chrome src/app/page.tsx tests/components/home-sections.test.tsx

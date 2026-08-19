@@ -1,7 +1,9 @@
+import { CareerTimeline } from "@/components/home/CareerTimeline";
+import { Contact } from "@/components/home/Contact";
+import { Hero } from "@/components/home/Hero";
+import { WorkBento } from "@/components/home/WorkBento";
+import { workItems } from "@/content/work.registry";
+
 export default function HomePage() {
-  return (
-    <main>
-      <h1>느낌 대신, 측정으로 증명합니다.</h1>
-    </main>
-  );
+  return <><Hero /><WorkBento items={workItems} /><CareerTimeline /><Contact /></>;
 }

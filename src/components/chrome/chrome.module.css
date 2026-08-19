@@ -1,0 +1,6 @@
+.header, .footer { padding-block: var(--space-4); }
+.nav { display: flex; min-height: 44px; align-items: center; gap: var(--space-4); }
+.brand { display: inline-flex; min-height: 44px; align-items: center; margin-right: auto; font-weight: 700; text-decoration: none; }
+.nav > a:not(.brand) { display: none; }
+.footer { border-top: 1px solid var(--line); color: var(--muted); }
+@media (min-width: 768px) { .nav > a:not(.brand) { display: inline-flex; min-height: 44px; align-items: center; } }
