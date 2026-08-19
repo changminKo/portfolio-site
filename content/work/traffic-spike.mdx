@@ -1,0 +1,29 @@
+---
+slug: traffic-spike
+order: 2
+title: Next.js 트래픽 스파이크 대응
+summary: 배포·번들·이미지 경로를 함께 바꿔 P95를 97% 줄이고 처리량을 2.7배 높였습니다.
+role: 성능 분석·배포 구조·프론트엔드 최적화
+period: 밀리의서재 · 2023–현재
+stack: [TypeScript, Next.js, Docker, Web Vitals]
+evidence:
+  - { label: P95, before: "15000", after: "450", unit: ms }
+  - { label: 처리량, value: "2.7배" }
+  - { label: 이미지, before: "6.69", after: "1.87", unit: GB }
+demo: traffic
+cardSize: large
+---
+
+## 문제
+
+트래픽 급증 구간에서 서버 응답 지연과 정적 자산 비용이 함께 증가해 P95가 15초까지 치솟고 처리량이 제한됐습니다.
+
+## 행동
+
+Next.js standalone 배포를 재구성하고 서버 번들을 축소했습니다. 초기 경로의 비핵심 기능을 lazy loading으로 분리하고 이미지 전송량과 Web Vitals를 같은 변경 묶음에서 추적했습니다.
+
+<div data-wide role="img" aria-label="요청 큐가 축소된 standalone 서버 번들과 지연 로딩 정적 자산으로 분기되는 최적화 구조"><code>요청 큐 → standalone 서버 → 축소된 server bundle<br />브라우저 → 핵심 route chunk + 필요 시 lazy chunk → 최적화 이미지</code></div>
+
+## 성과
+
+처리량은 2.7배, P95는 15,000ms에서 450ms로 개선됐습니다. Web Vitals 점수는 68에서 88, 이미지 용량은 6.69GB에서 1.87GB로 줄었습니다. 데모의 값은 실측 재생이 아니라 결정적 가상 큐의 출력입니다.

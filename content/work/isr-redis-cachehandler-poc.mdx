@@ -1,0 +1,32 @@
+---
+slug: isr-redis-cachehandler-poc
+order: 6
+title: ISR + Redis CacheHandler PoC와 도입 보류
+summary: 구현 가능성보다 운영 복잡도와 장애 범위를 먼저 평가해 도입을 보류했습니다.
+role: PoC·캐시 설계·기술 의사결정
+period: 밀리의서재 · 2023–현재
+stack: [Next.js, ISR, Redis, CacheHandler]
+evidence:
+  - { label: 결정, value: "PoC 후 도입 보류" }
+demo: none
+cardSize: standard
+---
+
+## 문제
+
+ISR 캐시를 Redis CacheHandler로 공유하는 방안이 실제 운영 이득을 주는지, 추가 인프라와 장애 범위를 감수할 가치가 있는지 검증해야 했습니다.
+
+## 행동
+
+PoC로 캐시 읽기·쓰기 경로를 구성하고 기대 이득, 운영 복잡도, 장애 전파 범위, 관측 가능성, 롤백 비용을 같은 의사결정 매트릭스에서 평가했습니다.
+
+| 판단 축 | 검증 방법 | 채택 조건 |
+|---|---|---|
+| 실측 이득 | 기존 ISR과 Redis 공유 캐시의 응답·hit ratio 비교 | 운영 비용을 상쇄하는 개선 |
+| 운영 복잡도 | Redis·CacheHandler 배포와 관측 절차 실행 | 팀이 지속 운영 가능한 절차 |
+| 장애 범위 | Redis 지연·중단 시나리오 주입 | 인스턴스 간 장애 전파 격리 |
+| 롤백 | 기존 ISR 경로 복귀 rehearsal | 데이터 손실 없는 즉시 복귀 |
+
+## 성과
+
+구현 가능하다는 이유만으로 도입하지 않고 채택을 보류했습니다. 확인되지 않은 성능 수치를 만들지 않고 문제 적합성과 운영 비용을 우선한 판단 과정을 성과로 제시합니다.

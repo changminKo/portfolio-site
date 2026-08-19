@@ -1,0 +1,28 @@
+---
+slug: vue-next-migration
+order: 3
+title: 무중단 Vue→Next.js 전환
+summary: LB 경로 라우팅과 dev-proxy로 6개 도메인을 중단 없이 점진 전환했습니다.
+role: 전환 아키텍처·라우팅·개발 환경
+period: 밀리의서재 · 2023–현재
+stack: [Vue, Nuxt, React, Next.js, Load Balancer]
+evidence:
+  - { label: 전환 도메인, value: "6개" }
+  - { label: 서비스 중단, value: "0건" }
+demo: none
+cardSize: standard
+---
+
+## 문제
+
+운영 중인 Vue 서비스 6개 도메인을 한 번에 교체하면 배포 위험과 회귀 범위가 커지고, 두 프레임워크가 공존하는 동안 개발 환경과 운영 요청 경로가 달라질 수 있었습니다.
+
+## 행동
+
+로드 밸런서에서 경로별로 Vue와 Next.js를 나눠 라우팅했습니다. 로컬에도 같은 경로 규칙을 재현하는 dev-proxy를 만들어 기능 단위 이관과 즉시 롤백이 가능하게 했습니다.
+
+<div data-wide role="img" aria-label="로드 밸런서가 유지 경로는 Vue로, 이관 경로는 Next.js로 보내며 dev-proxy가 같은 규칙을 재현하는 병행 라우팅"><code>Request → Load Balancer → 유지 경로: Vue<br />Request → Load Balancer → 이관 경로: Next.js<br />Local Request → dev-proxy → 같은 경로 규칙</code></div>
+
+## 성과
+
+6개 도메인을 서비스 중단 0건으로 전환했습니다. 빅뱅 교체 대신 병행 운영을 선택해 변경 범위와 롤백 경계를 작게 유지했습니다.

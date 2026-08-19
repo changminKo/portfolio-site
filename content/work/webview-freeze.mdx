@@ -1,0 +1,28 @@
+---
+slug: webview-freeze
+order: 1
+title: 안드로이드 웹뷰 10초+ freeze 진단
+summary: 697개 호출 경로의 쿠키 재파싱을 찾아 메인스레드 점유를 71% 줄였습니다.
+role: 성능 진단·캐시 설계·검증
+period: 밀리의서재 · 2023–현재
+stack: [TypeScript, React, Android WebView, Performance API]
+evidence:
+  - { label: 메인스레드, before: "9.2", after: "2.6", unit: s }
+  - { label: Long Task, before: "4", after: "0", unit: 개 }
+demo: freeze
+cardSize: large
+---
+
+## 문제
+
+안드로이드 웹뷰 첫 진입에서 화면이 10초 이상 멈췄습니다. 프로파일링 결과 `getConfig()`가 697개 호출부에서 매 렌더마다 `document.cookie`를 다시 파싱하며 메인스레드를 점유했습니다.
+
+## 행동
+
+호출 빈도와 Long Task 타임라인을 연결해 원인을 좁혔습니다. 쿠키 파싱 결과를 캐시하고 첫 렌더에는 동기 시드 값을 제공해 비동기 준비를 기다리지 않도록 경계를 바꿨습니다.
+
+<div data-wide role="img" aria-label="697개 호출부에서 getConfig와 document.cookie 재파싱을 거쳐 Long Task가 발생하고, 캐시와 동기 시드로 경로를 줄이는 흐름"><code>697 호출부 → getConfig() → document.cookie 재파싱 → Long Task<br />697 호출부 → 캐시 읽기 + 첫 렌더 동기 시드 → 즉시 반환</code></div>
+
+## 성과
+
+메인스레드 점유는 9.2초에서 2.6초로 71% 감소했고 Long Task는 4개에서 0개가 됐습니다. 공개 데모는 실제 쿠키가 아니라 64KB 합성 문자열로 같은 원리만 재현합니다.
