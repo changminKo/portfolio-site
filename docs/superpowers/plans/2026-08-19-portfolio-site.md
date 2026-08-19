@@ -2564,7 +2564,7 @@ git commit -m "feat: Long Task를 재현하는 freeze 데모 구현"
 - Consumes: 없음. Worker와 React에 의존하지 않는 순수 TypeScript다.
 - Produces: `ServerModel = "before" | "after"`; `TrafficConfig { concurrentUsers: number; model: ServerModel; seed: number }`; `TrafficSample { timeMs; p95Ms; throughput; queueDepth; rejectedCount }`; `TrafficState`; `capacityFor(model): number`; `createTrafficState(config): TrafficState`; `stepTraffic(state): TrafficState`.
 
-- [ ] **Step 1: 결정성·용량·상한의 실패 테스트를 작성한다**
+- [x] **Step 1: 결정성·용량·상한의 실패 테스트를 작성한다**
 
 Create `tests/unit/traffic-engine.test.ts`:
 
@@ -2603,13 +2603,13 @@ describe("traffic engine", () => {
 });
 ```
 
-- [ ] **Step 2: traffic engine 부재로 실패하는지 확인한다**
+- [x] **Step 2: traffic engine 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/unit/traffic-engine.test.ts`
 
 Expected: FAIL with an import resolution error for `traffic-engine`.
 
-- [ ] **Step 3: 모델 타입·seed PRNG·용량 계산을 구현한다**
+- [x] **Step 3: 모델 타입·seed PRNG·용량 계산을 구현한다**
 
 Create `src/features/demos/traffic/traffic-engine.ts`:
 
@@ -2666,7 +2666,7 @@ export function createTrafficState(config: TrafficConfig): TrafficState {
 }
 ```
 
-- [ ] **Step 4: FIFO 한 tick과 60초 표본을 구현한다**
+- [x] **Step 4: FIFO 한 tick과 60초 표본을 구현한다**
 
 Append to `src/features/demos/traffic/traffic-engine.ts`:
 
@@ -2732,7 +2732,7 @@ export function stepTraffic(state: TrafficState): TrafficState {
 }
 ```
 
-- [ ] **Step 5: traffic 엔진 검사를 통과시킨다**
+- [x] **Step 5: traffic 엔진 검사를 통과시킨다**
 
 Run:
 
@@ -2743,7 +2743,7 @@ pnpm typecheck
 
 Expected: 4 tests pass; capacity 160/432, deterministic series, monotonic load behavior, queue cap all pass.
 
-- [ ] **Step 6: traffic 엔진을 커밋한다**
+- [x] **Step 6: traffic 엔진을 커밋한다**
 
 ```bash
 git add src/features/demos/traffic/traffic-engine.ts tests/unit/traffic-engine.test.ts
