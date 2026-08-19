@@ -4,7 +4,7 @@ import { useReportWebVitals } from "next/web-vitals";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createFrameMeter, type FrameMeter, type FrameSnapshot } from "@/lib/performance/frame-meter";
 import type { VisualMetricFixture } from "@/lib/performance/visual-fixture";
-import { detectVitalSupport, formatVital, type VitalName, type VitalSupport } from "@/lib/performance/vitals";
+import { detectVitalSupport, formatVital, observeBufferedVitals, type VitalName, type VitalSupport } from "@/lib/performance/vitals";
 import styles from "./live-metrics.module.css";
 
 type Values = Partial<Record<VitalName, number>>;
@@ -33,6 +33,12 @@ export function LiveBrowserMetrics({
   }, [fixture]);
   useReportWebVitals(onVital);
   useEffect(() => {
+    if (fixture) return;
+    return observeBufferedVitals((name, value) => {
+      setValues((current) => ({ ...current, [name]: value }));
+    });
+  }, [fixture]);
+  useEffect(() => {
     if (fixture || document.hidden) return;
     let stop = meter.start(setFrame);
     const onVisibility = () => { stop(); if (!document.hidden) stop = meter.start(setFrame); };
@@ -48,8 +54,16 @@ export function LiveBrowserMetrics({
 
   return (
     <section className={styles.panel} aria-label="현재 브라우저 실측 성능">
-      {(["LCP", "CLS", "INP"] as const).map((name) => <div key={name}><span>{name}</span><strong>{text(name)}</strong></div>)}
-      <div><span>렌더 프레임</span><strong>{frame ? `${frame.medianMs}ms · ${frame.fps} FPS` : "측정 중"}</strong></div>
+      {(["LCP", "CLS", "INP"] as const).map((name) => (
+        <div key={name}>
+          <span>{name}</span>
+          <strong data-state={supported[name] && values[name] !== undefined ? "value" : "pending"}>{text(name)}</strong>
+        </div>
+      ))}
+      <div>
+        <span>렌더 프레임</span>
+        <strong data-state={frame ? "value" : "pending"}>{frame ? `${frame.medianMs}ms · ${frame.fps} FPS` : "측정 중"}</strong>
+      </div>
       <span className={styles.srOnly} aria-live="polite">{announcement}</span>
     </section>
   );

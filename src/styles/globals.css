@@ -1,14 +1,46 @@
 @import "./tokens.css";
 
 * { box-sizing: border-box; }
+
 html { background: var(--bg); }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-sans), sans-serif; overflow-wrap: anywhere; }
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  /* 측정지 눈금 — 콘텐츠를 방해하지 않는 세기로 깔린다 */
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: center top;
+  color: var(--text);
+  font-family: var(--font-sans), sans-serif;
+}
+
+/*
+ * 한국어는 어절 단위로 끊어야 읽힌다. keep-all 없이 좁은 컨테이너에 큰 제목을 두면
+ * "증명합니 / 다." 처럼 단어 중간에서 잘린다. 긴 라틴 토큰만 예외로 강제 분리한다.
+ */
+body, h1, h2, h3, h4, p, li, figcaption, th, td, button, label {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+h1, h2, h3, h4 { margin: 0; }
+
 a { color: inherit; text-underline-offset: 0.2em; }
 button, input { font: inherit; }
+
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
 .skip-link { position: fixed; inset: 8px auto auto 8px; z-index: 100; transform: translateY(-150%); background: var(--text); color: var(--bg); padding: 12px 16px; }
 .skip-link:focus { transform: translateY(0); }
+
 .page-shell { width: min(var(--page-width), calc(100% - 40px)); margin-inline: auto; }
 .site-main { min-height: 70dvh; }
+
 @media (min-width: 768px) { .page-shell { width: min(var(--page-width), calc(100% - 64px)); } }
 @media (min-width: 1440px) { .page-shell { width: min(var(--page-width), calc(100% - 96px)); } }

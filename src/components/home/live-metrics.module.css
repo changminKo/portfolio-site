@@ -1,7 +1,90 @@
-.panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--surface); }
-.panel > div { display: grid; min-height: 112px; align-content: space-between; gap: var(--space-3); padding: var(--space-4); border: 0 solid var(--line); }
+/*
+ * 히어로의 계기판. 주장이 아니라 지금 이 브라우저의 실측값이라는 걸
+ * 라벨·눈금·상태 점으로 드러낸다.
+ */
+
+.panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--line-strong);
+  border-radius: var(--card-radius);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-raised);
+  overflow: hidden;
+}
+
+/* 상단 캡션 바 — 계측 장비의 라벨 띠 */
+.panel::before {
+  content: "LIVE · THIS BROWSER";
+  grid-column: 1 / -1;
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-deep);
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+}
+
+.panel > div {
+  display: grid;
+  min-height: 108px;
+  align-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 0 solid var(--line);
+}
+
 .panel > div:nth-child(odd) { border-right-width: 1px; }
 .panel > div:nth-child(-n+2) { border-bottom-width: 1px; }
-.panel span { color: var(--muted); font-family: var(--font-mono), monospace; }
-.panel strong { min-height: 1.5em; font-family: var(--font-mono), monospace; font-variant-numeric: tabular-nums; }
+
+.panel span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* 라벨 앞 상태 점 */
+.panel span::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--positive);
+  flex: none;
+}
+
+/* 확정된 수치 — 모노스페이스로 자릿수를 고정해 계기판처럼 읽힌다 */
+.panel strong {
+  min-height: 1.5em;
+  color: var(--text);
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(1.2rem, 1.75vw, 1.5rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+/*
+ * "측정 중"·"입력 전" 같은 상태 문구는 한국어라 모노스페이스에서 자간이 벌어진다.
+ * 본문 서체로 되돌리고 크기를 낮춰 수치와 혼동되지 않게 한다.
+ */
+.panel strong[data-state="pending"] {
+  color: var(--muted);
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.panel > div:has(strong[data-state="pending"]) span::before { background: var(--line-strong); }
+
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }

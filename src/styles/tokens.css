@@ -1,13 +1,30 @@
 :root {
   color-scheme: light;
-  --bg: #f5f4ef;
-  --surface: #ffffff;
-  --text: #111318;
-  --muted: #59616c;
-  --line: #d3d5d1;
-  --accent: #2457e6;
-  --positive: #087553;
-  --warning: #b54708;
+
+  /* 종이와 측정 기록에 가까운 warm neutral */
+  --bg: #f2f1ea;
+  --bg-deep: #e9e8df;
+  --surface: #fbfaf6;
+  --surface-raised: #ffffff;
+  --text: #14161a;
+  --muted: #5b6370;
+  --line: #d5d5cd;
+  --line-strong: #b9b9ae;
+
+  --accent: #1c4fd8;
+  --accent-soft: rgba(28, 79, 216, 0.09);
+  --positive: #0a6d4e;
+  --positive-soft: rgba(10, 109, 78, 0.1);
+  --warning: #a8410a;
+  --warning-soft: rgba(168, 65, 10, 0.1);
+
+  /* 측정지 눈금 — 배경에 얇게 깔린다 */
+  --grid-line: rgba(20, 22, 26, 0.045);
+  --grid-size: 32px;
+
+  --shadow-card: 0 1px 2px rgba(20, 22, 26, 0.04), 0 8px 24px -16px rgba(20, 22, 26, 0.18);
+  --shadow-raised: 0 2px 4px rgba(20, 22, 26, 0.05), 0 18px 40px -20px rgba(20, 22, 26, 0.24);
+
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -18,20 +35,37 @@
   --space-16: 64px;
   --space-24: 96px;
   --space-32: 128px;
+
   --page-width: 75rem;
   --reading-width: 45rem;
   --card-radius: 8px;
   --phone-radius: 28px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark {
   color-scheme: dark;
-  --bg: #0b0d10;
+
+  /* 푸른 기가 적은 계기판 배경 */
+  --bg: #0a0c0f;
+  --bg-deep: #06080a;
   --surface: #12161c;
-  --text: #f4f5f0;
-  --muted: #aab2bd;
-  --line: #303641;
-  --accent: #86a6ff;
-  --positive: #5bd3a5;
-  --warning: #ffb36b;
+  --surface-raised: #171c24;
+  --text: #f2f3ee;
+  --muted: #a4adb9;
+  --line: #2b313b;
+  --line-strong: #3d4550;
+
+  --accent: #7fa3ff;
+  --accent-soft: rgba(127, 163, 255, 0.14);
+  --positive: #4fd0a0;
+  --positive-soft: rgba(79, 208, 160, 0.14);
+  --warning: #ffb168;
+  --warning-soft: rgba(255, 177, 104, 0.14);
+
+  --grid-line: rgba(242, 243, 238, 0.05);
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 24px -16px rgba(0, 0, 0, 0.7);
+  --shadow-raised: 0 2px 4px rgba(0, 0, 0, 0.55), 0 18px 40px -20px rgba(0, 0, 0, 0.8);
 }
