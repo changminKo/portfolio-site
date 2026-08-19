@@ -3701,7 +3701,7 @@ git commit -m "test: 시각회귀와 접근성 게이트 추가"
 - Consumes: Task 8·10·12·13의 DOM marker `demo-chunk:freeze|traffic|stackflow`; Task 14 production Playwright server.
 - Produces: `pnpm check:chunks`; `pnpm perf:lhci`; 홈 initial script `encodedBodySize < 153600`; three marker locations with `Set.size === 3`; Lighthouse median Performance/Accessibility 1.0, LCP 1500ms, CLS 0.05 assertions.
 
-- [ ] **Step 1: Lighthouse CI를 설치하고 스크립트를 등록한다**
+- [x] **Step 1: Lighthouse CI를 설치하고 스크립트를 등록한다**
 
 Run:
 
@@ -3712,7 +3712,7 @@ pnpm pkg set scripts.check:chunks="node scripts/check-demo-chunks.mjs" scripts.p
 
 Expected: `@lhci/cli`, `check:chunks`, `perf:lhci` are present.
 
-- [ ] **Step 2: 세 marker의 물리 청크 분리 검사를 작성한다**
+- [x] **Step 2: 세 marker의 물리 청크 분리 검사를 작성한다**
 
 Create `scripts/check-demo-chunks.mjs`:
 
@@ -3739,7 +3739,7 @@ if (uniqueFiles.size !== 3) throw new Error(`세 데모가 ${uniqueFiles.size}�
 console.log(Object.fromEntries(locations));
 ```
 
-- [ ] **Step 3: 홈 전송 JS와 초기 marker 부재 E2E를 작성한다**
+- [x] **Step 3: 홈 전송 JS와 초기 marker 부재 E2E를 작성한다**
 
 Create `tests/e2e/performance-budget.spec.ts`:
 
@@ -3762,7 +3762,7 @@ test("홈 초기 gzip JavaScript가 150KB 미만이고 데모 marker가 없다",
 });
 ```
 
-- [ ] **Step 4: Lighthouse CI 3회 중앙값 기준을 작성한다**
+- [x] **Step 4: Lighthouse CI 3회 중앙값 기준을 작성한다**
 
 Create `lighthouserc.cjs`:
 
@@ -3796,7 +3796,7 @@ Append to `.gitignore`:
 .next/diagnostics/
 ```
 
-- [ ] **Step 5: production 성능과 청크 검사를 실행한다**
+- [x] **Step 5: production 성능과 청크 검사를 실행한다**
 
 Run:
 
@@ -3810,7 +3810,7 @@ pnpm perf:lhci
 
 Expected: each marker appears in one unique chunk; home encoded JavaScript is below 153600 bytes with no demo marker; analyzer writes `.next/diagnostics/analyze`; Lighthouse median reports Performance 1.0, Accessibility 1.0, LCP below 1500ms, CLS below 0.05.
 
-- [ ] **Step 6: 성능 회귀 게이트를 커밋한다**
+- [x] **Step 6: 성능 회귀 게이트를 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml scripts/check-demo-chunks.mjs tests/e2e/performance-budget.spec.ts lighthouserc.cjs .gitignore

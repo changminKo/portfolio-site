@@ -5,3 +5,5 @@ playwright-report/
 test-results/
 .env*
 !.env.example
+.lighthouseci/
+.next/diagnostics/

@@ -16,7 +16,9 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:e2e": "playwright test",
-    "build:visual": "cross-env NEXT_PUBLIC_VISUAL_TEST=1 next build"
+    "build:visual": "cross-env NEXT_PUBLIC_VISUAL_TEST=1 next build",
+    "check:chunks": "node scripts/check-demo-chunks.mjs",
+    "perf:lhci": "pnpm build && lhci autorun"
   },
   "dependencies": {
     "@next/mdx": "^16.3.1",
@@ -36,6 +38,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@lhci/cli": "^0.15.1",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/rollup": "^3.1.1",
     "@next/eslint-plugin-next": "16.2.9",
