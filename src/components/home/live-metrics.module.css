@@ -1,0 +1,7 @@
+.panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--surface); }
+.panel > div { display: grid; min-height: 112px; align-content: space-between; gap: var(--space-3); padding: var(--space-4); border: 0 solid var(--line); }
+.panel > div:nth-child(odd) { border-right-width: 1px; }
+.panel > div:nth-child(-n+2) { border-bottom-width: 1px; }
+.panel span { color: var(--muted); font-family: var(--font-mono), monospace; }
+.panel strong { min-height: 1.5em; font-family: var(--font-mono), monospace; font-variant-numeric: tabular-nums; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }

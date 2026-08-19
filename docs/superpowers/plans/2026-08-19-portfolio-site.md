@@ -1667,7 +1667,7 @@ git commit -m "feat: 정적 MDX 케이스스터디 페이지 구현"
 - Consumes: Task 5의 `Hero({ metrics?: ReactNode })`.
 - Produces: `VitalName = "LCP" | "CLS" | "INP"`; `VitalSupport = Record<VitalName, boolean>`; `detectVitalSupport(): VitalSupport`; `formatVital(name: VitalName, value: number): string`; `FrameSnapshot { medianMs: number; fps: number }`; `summarizeFrameGaps(gaps: readonly number[]): FrameSnapshot`; `FrameMeter { start(onSample: (sample: FrameSnapshot) => void): () => void }`; `createFrameMeter(): FrameMeter`; `LiveBrowserMetrics(props: { frameMeter?: FrameMeter; support?: VitalSupport }): JSX.Element`.
 
-- [ ] **Step 1: 프레임 통계의 실패 테스트를 작성한다**
+- [x] **Step 1: 프레임 통계의 실패 테스트를 작성한다**
 
 Create `tests/unit/frame-meter.test.ts`:
 
@@ -1680,13 +1680,13 @@ it("최근 프레임 간격의 중앙값과 FPS를 계산한다", () => {
 });
 ```
 
-- [ ] **Step 2: 프레임 모듈 부재로 실패하는지 확인한다**
+- [x] **Step 2: 프레임 모듈 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/unit/frame-meter.test.ts`
 
 Expected: FAIL with an import resolution error for `frame-meter`.
 
-- [ ] **Step 3: FrameMeter를 최소 구현한다**
+- [x] **Step 3: FrameMeter를 최소 구현한다**
 
 Create `src/lib/performance/frame-meter.ts`:
 
@@ -1725,13 +1725,13 @@ export function createFrameMeter(): FrameMeter {
 }
 ```
 
-- [ ] **Step 4: 프레임 단위 테스트를 통과시킨다**
+- [x] **Step 4: 프레임 단위 테스트를 통과시킨다**
 
 Run: `pnpm test:run tests/unit/frame-meter.test.ts`
 
 Expected: 1 test passes.
 
-- [ ] **Step 5: Web Vitals 상태의 실패 컴포넌트 테스트를 작성한다**
+- [x] **Step 5: Web Vitals 상태의 실패 컴포넌트 테스트를 작성한다**
 
 Create `tests/components/live-browser-metrics.test.tsx`:
 
@@ -1758,13 +1758,13 @@ it("측정 전 상태에서 실제 지표와 프레임 값으로 전환한다", 
 });
 ```
 
-- [ ] **Step 6: LiveBrowserMetrics 부재로 실패하는지 확인한다**
+- [x] **Step 6: LiveBrowserMetrics 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/live-browser-metrics.test.tsx`
 
 Expected: FAIL with an import resolution error for `LiveBrowserMetrics`.
 
-- [ ] **Step 7: Vital 지원·format 함수와 클라이언트 패널을 구현한다**
+- [x] **Step 7: Vital 지원·format 함수와 클라이언트 패널을 구현한다**
 
 Create `src/lib/performance/vitals.ts`:
 
@@ -1848,7 +1848,7 @@ Create `src/components/home/live-metrics.module.css`:
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 ```
 
-- [ ] **Step 8: 히어로에 라이브 패널을 연결한다**
+- [x] **Step 8: 히어로에 라이브 패널을 연결한다**
 
 Replace `src/app/page.tsx`:
 
@@ -1865,7 +1865,7 @@ export default function HomePage() {
 }
 ```
 
-- [ ] **Step 9: 라이브 지표 관련 검사를 통과시킨다**
+- [x] **Step 9: 라이브 지표 관련 검사를 통과시킨다**
 
 Run:
 
@@ -1877,7 +1877,7 @@ pnpm typecheck
 
 Expected: frame test and both component tests pass; lint/typecheck exit 0.
 
-- [ ] **Step 10: 실측 히어로를 커밋한다**
+- [x] **Step 10: 실측 히어로를 커밋한다**
 
 ```bash
 git add src/lib/performance src/components/home/LiveBrowserMetrics.tsx src/components/home/live-metrics.module.css src/app/page.tsx tests/unit/frame-meter.test.ts tests/components/live-browser-metrics.test.tsx
