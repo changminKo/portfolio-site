@@ -333,7 +333,7 @@ git commit -m "chore: Next.js와 테스트 기반 구성"
 - Consumes: Task 1의 `RootLayout({ children }: { children: ReactNode }): JSX.Element`, Vitest jsdom 설정.
 - Produces: `ThemeProvider({ children }: PropsWithChildren): JSX.Element`; `ThemeToggle(): JSX.Element`; `Header(): JSX.Element`; `Footer(): JSX.Element`; `Reveal({ children, delay? }: { children: ReactNode; delay?: number }): JSX.Element`; 전역 CSS 변수 `--bg|surface|text|muted|line|accent|positive|warning`, `--space-1|2|3|4|6|8|12|16|24|32`.
 
-- [ ] **Step 1: 테마 토글의 실패 테스트를 작성한다**
+- [x] **Step 1: 테마 토글의 실패 테스트를 작성한다**
 
 Create `tests/components/theme-toggle.test.tsx`:
 
@@ -359,13 +359,13 @@ it("시스템·라이트·다크 선택을 제공하고 다크 선택을 저장�
 });
 ```
 
-- [ ] **Step 2: 테마 테스트가 컴포넌트 부재로 실패하는지 확인한다**
+- [x] **Step 2: 테마 테스트가 컴포넌트 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/theme-toggle.test.tsx`
 
 Expected: FAIL with an import resolution error for `ThemeToggle`.
 
-- [ ] **Step 3: 고정 컬러·spacing 토큰과 전역 스타일을 작성한다**
+- [x] **Step 3: 고정 컬러·spacing 토큰과 전역 스타일을 작성한다**
 
 Create `src/styles/tokens.css`:
 
@@ -428,7 +428,7 @@ button, input { font: inherit; }
 @media (min-width: 1440px) { .page-shell { width: min(var(--page-width), calc(100% - 96px)); } }
 ```
 
-- [ ] **Step 4: ThemeProvider·ThemeToggle·chrome를 구현한다**
+- [x] **Step 4: ThemeProvider·ThemeToggle·chrome를 구현한다**
 
 Create `src/providers/ThemeProvider.tsx`:
 
@@ -515,7 +515,7 @@ export function Footer() {
 }
 ```
 
-- [ ] **Step 5: reduced-motion을 지키는 Reveal 경계를 구현한다**
+- [x] **Step 5: reduced-motion을 지키는 Reveal 경계를 구현한다**
 
 Create `src/components/motion/Reveal.tsx`:
 
@@ -542,7 +542,7 @@ export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: n
 }
 ```
 
-- [ ] **Step 6: 폰트·테마·landmark를 RootLayout에 연결한다**
+- [x] **Step 6: 폰트·테마·landmark를 RootLayout에 연결한다**
 
 Replace `src/app/layout.tsx`:
 
@@ -579,7 +579,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
 }
 ```
 
-- [ ] **Step 7: 테마와 기반 검사를 통과시킨다**
+- [x] **Step 7: 테마와 기반 검사를 통과시킨다**
 
 Run:
 
@@ -592,7 +592,7 @@ pnpm typecheck
 
 Expected: 2 tests pass and lint/typecheck exit 0.
 
-- [ ] **Step 8: 디자인 기반을 커밋한다**
+- [x] **Step 8: 디자인 기반을 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml src/styles src/providers src/components/chrome src/components/motion src/app/layout.tsx tests/components/theme-toggle.test.tsx

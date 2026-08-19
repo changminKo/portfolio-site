@@ -1,0 +1,37 @@
+:root {
+  color-scheme: light;
+  --bg: #f5f4ef;
+  --surface: #ffffff;
+  --text: #111318;
+  --muted: #59616c;
+  --line: #d3d5d1;
+  --accent: #2457e6;
+  --positive: #087553;
+  --warning: #b54708;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --page-width: 75rem;
+  --reading-width: 45rem;
+  --card-radius: 8px;
+  --phone-radius: 28px;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #0b0d10;
+  --surface: #12161c;
+  --text: #f4f5f0;
+  --muted: #aab2bd;
+  --line: #303641;
+  --accent: #86a6ff;
+  --positive: #5bd3a5;
+  --warning: #ffb36b;
+}
