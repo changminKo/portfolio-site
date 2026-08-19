@@ -2138,7 +2138,7 @@ git commit -m "feat: 세 데모의 지연 로딩 경계 구현"
 - Consumes: 없음. 브라우저 전역에 의존하지 않는 순수 TypeScript다.
 - Produces: `createSyntheticCookieSource(targetBytes?: number): string`; `parseCookieString(source: string): Readonly<Record<string, string>>`; `createCachedCookieParser(source: string, parser?: typeof parseCookieString): () => Readonly<Record<string, string>>`; `LongTaskRecord { startTime: number; duration: number }`; `LongTaskSummary { entries: readonly LongTaskRecord[]; count: number; totalBlockingMs: number }`; `summarizeLongTasks(entries, limit?): LongTaskSummary`.
 
-- [ ] **Step 1: 파서·캐시·요약의 실패 테스트를 작성한다**
+- [x] **Step 1: 파서·캐시·요약의 실패 테스트를 작성한다**
 
 Create `tests/unit/freeze-engine.test.ts`:
 
@@ -2175,13 +2175,13 @@ describe("freeze engine", () => {
 });
 ```
 
-- [ ] **Step 2: freeze engine 부재로 실패하는지 확인한다**
+- [x] **Step 2: freeze engine 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/unit/freeze-engine.test.ts`
 
 Expected: FAIL with an import resolution error for `freeze-engine`.
 
-- [ ] **Step 3: 합성 source와 파서·캐시를 구현한다**
+- [x] **Step 3: 합성 source와 파서·캐시를 구현한다**
 
 Create `src/features/demos/freeze/freeze-engine.ts`:
 
@@ -2228,7 +2228,7 @@ export function summarizeLongTasks(entries: readonly LongTaskRecord[], limit = 1
 }
 ```
 
-- [ ] **Step 4: freeze 순수 로직 검사를 통과시킨다**
+- [x] **Step 4: freeze 순수 로직 검사를 통과시킨다**
 
 Run:
 
@@ -2239,7 +2239,7 @@ pnpm typecheck
 
 Expected: 3 tests pass and typecheck exits 0.
 
-- [ ] **Step 5: freeze 엔진을 커밋한다**
+- [x] **Step 5: freeze 엔진을 커밋한다**
 
 ```bash
 git add src/features/demos/freeze/freeze-engine.ts tests/unit/freeze-engine.test.ts
