@@ -2767,7 +2767,7 @@ git commit -m "feat: 결정적 traffic 요청 큐 엔진 구현"
 - Consumes: Task 11의 `TrafficConfig`, `TrafficSample`, `TrafficState`, `createTrafficState`, `stepTraffic`.
 - Produces: `TrafficWorkerIn = { type: "start" | "configure"; config: TrafficConfig } | { type: "stop" }`; `TrafficWorkerOut = { type: "sample"; sample: TrafficSample; series: readonly TrafficSample[] } | { type: "error"; message: string }`; `isTrafficWorkerIn(value: unknown): value is TrafficWorkerIn`; default `TrafficSpikeDemo(): JSX.Element` with marker `demo-chunk:traffic`.
 
-- [ ] **Step 1: Worker protocol의 실패 테스트를 작성한다**
+- [x] **Step 1: Worker protocol의 실패 테스트를 작성한다**
 
 Create `tests/unit/traffic-protocol.test.ts`:
 
@@ -2783,13 +2783,13 @@ it("유효한 start와 stop만 Worker 입력으로 허용한다", () => {
 });
 ```
 
-- [ ] **Step 2: protocol 모듈 부재로 실패하는지 확인한다**
+- [x] **Step 2: protocol 모듈 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/unit/traffic-protocol.test.ts`
 
 Expected: FAIL with an import resolution error for `traffic-protocol`.
 
-- [ ] **Step 3: Worker 메시지 타입과 검증을 구현한다**
+- [x] **Step 3: Worker 메시지 타입과 검증을 구현한다**
 
 Create `src/features/demos/traffic/traffic-protocol.ts`:
 
@@ -2818,7 +2818,7 @@ export function isTrafficWorkerIn(value: unknown): value is TrafficWorkerIn {
 }
 ```
 
-- [ ] **Step 4: Worker의 250ms 실행과 종료를 구현한다**
+- [x] **Step 4: Worker의 250ms 실행과 종료를 구현한다**
 
 Create `src/features/demos/traffic/traffic.worker.ts`:
 
@@ -2852,7 +2852,7 @@ scope.onmessage = ({ data }: MessageEvent<unknown>) => {
 export {};
 ```
 
-- [ ] **Step 5: traffic UI의 실패 테스트를 작성한다**
+- [x] **Step 5: traffic UI의 실패 테스트를 작성한다**
 
 Create `tests/components/traffic-demo.test.tsx`:
 
@@ -2899,13 +2899,13 @@ it("reduced-motion에서는 1Hz 갱신 모드를 표시한다", () => {
 });
 ```
 
-- [ ] **Step 6: 초기 marker UI가 control 요구를 충족하지 못해 실패하는지 확인한다**
+- [x] **Step 6: 초기 marker UI가 control 요구를 충족하지 못해 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/traffic-demo.test.tsx`
 
 Expected: FAIL because the slider and model radios are absent.
 
-- [ ] **Step 7: Canvas 그래프를 구현한다**
+- [x] **Step 7: Canvas 그래프를 구현한다**
 
 Create `src/features/demos/traffic/MetricCanvas.tsx`:
 
@@ -2938,7 +2938,7 @@ export function MetricCanvas({ series, metric, label }: { series: readonly Traff
 }
 ```
 
-- [ ] **Step 8: Worker 수명주기·control·접근 가능한 표를 구현한다**
+- [x] **Step 8: Worker 수명주기·control·접근 가능한 표를 구현한다**
 
 Replace `src/features/demos/traffic/TrafficSpikeDemo.tsx`:
 
@@ -3018,7 +3018,7 @@ Create `src/features/demos/traffic/traffic-demo.module.css`:
 @media (min-width: 768px) { .graphs, .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 ```
 
-- [ ] **Step 9: traffic 전체 검사를 통과시킨다**
+- [x] **Step 9: traffic 전체 검사를 통과시킨다**
 
 Run:
 
@@ -3030,7 +3030,7 @@ pnpm typecheck
 
 Expected: 6 traffic tests pass and lint/typecheck exit 0.
 
-- [ ] **Step 10: Worker traffic 데모를 커밋한다**
+- [x] **Step 10: Worker traffic 데모를 커밋한다**
 
 ```bash
 git add src/features/demos/traffic tests/unit/traffic-protocol.test.ts tests/components/traffic-demo.test.tsx

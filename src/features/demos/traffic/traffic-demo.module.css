@@ -1,0 +1,9 @@
+.demo { display: grid; gap: var(--space-6); }
+.actual, .metrics, .graphs { display: grid; gap: var(--space-3); }
+.actual { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); padding: var(--space-4); border: 1px solid var(--positive); }
+.demo input[type="range"] { width: 100%; min-height: 44px; }
+.demo label, .demo button { min-height: 44px; }
+.graphs canvas { width: 100%; height: auto; border-bottom: 1px solid var(--line); }
+.demo table { width: 100%; border-collapse: collapse; }
+.demo th, .demo td { padding: var(--space-3); border: 1px solid var(--line); text-align: right; font-family: var(--font-mono), monospace; }
+@media (min-width: 768px) { .graphs, .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
