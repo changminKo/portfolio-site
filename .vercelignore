@@ -1,0 +1,12 @@
+tests
+docs
+scripts/check-demo-chunks.mjs
+playwright.config.ts
+vitest.config.ts
+lighthouserc.cjs
+test-results
+playwright-report
+.omc
+HANDOFF.md
+AGENTS.md
+CLAUDE.md
