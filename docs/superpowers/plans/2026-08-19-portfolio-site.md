@@ -2262,7 +2262,7 @@ git commit -m "feat: freeze 합성 쿠키 엔진 구현"
 - Consumes: Task 9의 `createSyntheticCookieSource`, `parseCookieString`, `createCachedCookieParser`, `summarizeLongTasks`, `LongTaskRecord`.
 - Produces: `FreezeMode = "reparse" | "cached"`; `FreezeClock { now; setInterval; clearInterval; setTimeout; clearTimeout }`; `FreezeSession { start(): void; stop(): void; dispose(): void }`; `runReparseBurst(source: string, targetMs: number, now?: () => number, parser?: typeof parseCookieString): void`; `createFreezeSession(options: { source: string; mode: FreezeMode; onTick: (elapsedMs: number) => void; onComplete: () => void; clock?: FreezeClock }): FreezeSession`; default `FreezeDemo(): JSX.Element` with marker `demo-chunk:freeze`.
 
-- [ ] **Step 1: 세션 상한과 모드 차이의 실패 테스트를 작성한다**
+- [x] **Step 1: 세션 상한과 모드 차이의 실패 테스트를 작성한다**
 
 Create `tests/unit/freeze-session.test.ts`:
 
@@ -2290,13 +2290,13 @@ it("세션은 250ms 주기로 실행되고 6초에 한 번 완료된다", () => 
 });
 ```
 
-- [ ] **Step 2: 세션 모듈 부재로 실패하는지 확인한다**
+- [x] **Step 2: 세션 모듈 부재로 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/unit/freeze-session.test.ts`
 
 Expected: FAIL with an import resolution error for `freeze-session`.
 
-- [ ] **Step 3: 80ms burst와 취소 가능한 세션을 구현한다**
+- [x] **Step 3: 80ms burst와 취소 가능한 세션을 구현한다**
 
 Create `src/features/demos/freeze/freeze-session.ts`:
 
@@ -2373,13 +2373,13 @@ export function createFreezeSession({
 }
 ```
 
-- [ ] **Step 4: 세션 단위 테스트를 통과시킨다**
+- [x] **Step 4: 세션 단위 테스트를 통과시킨다**
 
 Run: `pnpm test:run tests/unit/freeze-session.test.ts`
 
 Expected: 2 tests pass.
 
-- [ ] **Step 5: freeze 조작의 실패 컴포넌트 테스트를 작성한다**
+- [x] **Step 5: freeze 조작의 실패 컴포넌트 테스트를 작성한다**
 
 Create `tests/components/freeze-demo.test.tsx`:
 
@@ -2403,13 +2403,13 @@ it("경고·두 모드·실행·결과를 키보드 가능한 control로 제공�
 });
 ```
 
-- [ ] **Step 6: 초기 marker UI가 동작 요구를 충족하지 못해 실패하는지 확인한다**
+- [x] **Step 6: 초기 marker UI가 동작 요구를 충족하지 못해 실패하는지 확인한다**
 
 Run: `pnpm test:run tests/components/freeze-demo.test.tsx`
 
 Expected: FAIL because the initial marker component has no controls.
 
-- [ ] **Step 7: Long Task DOM 타임라인을 구현한다**
+- [x] **Step 7: Long Task DOM 타임라인을 구현한다**
 
 Create `src/features/demos/freeze/LongTaskTimeline.tsx`:
 
@@ -2433,7 +2433,7 @@ export function LongTaskTimeline({ entries }: { entries: readonly LongTaskRecord
 }
 ```
 
-- [ ] **Step 8: PerformanceObserver·frame gap·세션 UI를 구현한다**
+- [x] **Step 8: PerformanceObserver·frame gap·세션 UI를 구현한다**
 
 Replace `src/features/demos/freeze/FreezeDemo.tsx`:
 
@@ -2533,7 +2533,7 @@ Create `src/features/demos/freeze/freeze-demo.module.css`:
 @keyframes move { to { transform: translateX(min(60vw, 560px)); } }
 ```
 
-- [ ] **Step 9: freeze 전체 검사를 통과시킨다**
+- [x] **Step 9: freeze 전체 검사를 통과시킨다**
 
 Run:
 
@@ -2545,7 +2545,7 @@ pnpm typecheck
 
 Expected: 6 freeze tests pass and lint/typecheck exit 0.
 
-- [ ] **Step 10: freeze 데모를 커밋한다**
+- [x] **Step 10: freeze 데모를 커밋한다**
 
 ```bash
 git add src/features/demos/freeze tests/unit/freeze-session.test.ts tests/components/freeze-demo.test.tsx
