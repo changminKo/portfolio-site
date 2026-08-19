@@ -9,6 +9,8 @@ import styles from "./freeze-demo.module.css";
 type State = { mode: FreezeMode; status: "idle" | "running" | "complete"; elapsedMs: number; tasks: LongTaskRecord[]; maxFrameGapMs: number };
 type Action = { type: "mode"; mode: FreezeMode } | { type: "start" } | { type: "tick"; elapsedMs: number } | { type: "complete"; tasks: LongTaskRecord[]; maxFrameGapMs: number };
 const initial: State = { mode: "cached", status: "idle", elapsedMs: 0, tasks: [], maxFrameGapMs: 0 };
+const isVisualTest = process.env.NEXT_PUBLIC_VISUAL_TEST === "1";
+const VISUAL_TEST_FRAME_GAP_MS = 16;
 function reducer(state: State, action: Action): State {
   if (action.type === "mode") return { ...state, mode: action.mode };
   if (action.type === "start") return { ...state, status: "running", elapsedMs: 0, tasks: [], maxFrameGapMs: 0 };
@@ -27,7 +29,7 @@ export default function FreezeDemo() {
   const finish = () => {
     observerRef.current?.disconnect();
     cancelAnimationFrame(frameRef.current);
-    dispatch({ type: "complete", tasks: tasksRef.current.slice(0, 100), maxFrameGapMs: maxGapRef.current });
+    dispatch({ type: "complete", tasks: tasksRef.current.slice(0, 100), maxFrameGapMs: isVisualTest ? VISUAL_TEST_FRAME_GAP_MS : maxGapRef.current });
   };
   const start = () => {
     sessionRef.current?.dispose();

@@ -3307,7 +3307,7 @@ git commit -m "feat: 격리된 Stackflow 웹뷰 데모 구현"
 - Consumes: 7개 공개 route; Task 7의 `LiveBrowserMetrics`; Task 8의 `data-testid`; Task 10·12·13의 controls.
 - Produces: `VisualMetricFixture { values: Record<VitalName, number>; frame: FrameSnapshot }`; `VISUAL_METRIC_FIXTURE`; 확장된 `LiveBrowserMetrics(props: { frameMeter?: FrameMeter; support?: VitalSupport; fixture?: VisualMetricFixture }): JSX.Element`; visual build script `pnpm build:visual`; 42개의 고정 full-page baseline; axe serious/critical 0 gate.
 
-- [ ] **Step 1: E2E 접근성 도구와 visual build 스크립트를 추가한다**
+- [x] **Step 1: E2E 접근성 도구와 visual build 스크립트를 추가한다**
 
 Run:
 
@@ -3318,7 +3318,7 @@ pnpm pkg set scripts.build:visual="cross-env NEXT_PUBLIC_VISUAL_TEST=1 next buil
 
 Expected: packages and `build:visual` script are present.
 
-- [ ] **Step 2: 실측 패널의 결정적 visual fixture를 구현한다**
+- [x] **Step 2: 실측 패널의 결정적 visual fixture를 구현한다**
 
 Create `src/lib/performance/visual-fixture.ts`:
 
@@ -3397,7 +3397,7 @@ export default function HomePage() {
 }
 ```
 
-- [ ] **Step 3: production build 기반 Playwright 설정으로 교체한다**
+- [x] **Step 3: production build 기반 Playwright 설정으로 교체한다**
 
 Replace `playwright.config.ts`:
 
@@ -3423,7 +3423,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 4: IA와 데모 기능 E2E를 작성한다**
+- [x] **Step 4: IA와 데모 기능 E2E를 작성한다**
 
 Create `tests/e2e/navigation.spec.ts`:
 
@@ -3484,7 +3484,7 @@ test("세 데모를 조작해도 App Router URL은 바뀌지 않는다", async (
 });
 ```
 
-- [ ] **Step 5: 42개 full-page 시각회귀를 작성한다**
+- [x] **Step 5: 42개 full-page 시각회귀를 작성한다**
 
 Create `tests/e2e/visual.spec.ts`:
 
@@ -3521,7 +3521,7 @@ for (const [routeName, route] of routes) for (const [viewportName, width, height
 }
 ```
 
-- [ ] **Step 6: 데모 대표 상태 snapshot을 작성한다**
+- [x] **Step 6: 데모 대표 상태 snapshot을 작성한다**
 
 Create `tests/e2e/demo-visual.spec.ts`:
 
@@ -3607,7 +3607,7 @@ test("Stackflow 서재·상세·리더·reduced-motion 상태", async ({ page })
 });
 ```
 
-- [ ] **Step 7: light/dark 14개 axe와 overflow 검사를 작성한다**
+- [x] **Step 7: light/dark 14개 axe와 overflow 검사를 작성한다**
 
 Create `tests/e2e/accessibility.spec.ts`:
 
@@ -3667,7 +3667,7 @@ test("Tab으로 skip link에 도달하고 Escape로 freeze를 중지한다", asy
 });
 ```
 
-- [ ] **Step 8: 기능·axe를 먼저 통과시키고 baseline을 생성한다**
+- [x] **Step 8: 기능·axe를 먼저 통과시키고 baseline을 생성한다**
 
 Run:
 
@@ -3679,7 +3679,7 @@ pnpm test:e2e
 
 Expected: navigation and 17 accessibility tests pass; 42 full-page plus 10 demo baseline images are created; the final full suite passes with no diff.
 
-- [ ] **Step 9: 시각·접근성 게이트를 커밋한다**
+- [x] **Step 9: 시각·접근성 게이트를 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml playwright.config.ts src/lib/performance/visual-fixture.ts src/components/home/LiveBrowserMetrics.tsx src/app/page.tsx tests/e2e

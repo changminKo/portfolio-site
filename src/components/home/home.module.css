@@ -1,13 +1,14 @@
 .hero, .section { width: min(var(--page-width), calc(100% - 40px)); margin-inline: auto; }
-.hero { min-height: 82dvh; display: grid; align-items: center; gap: var(--space-12); padding-block: var(--space-24); }
+.hero { min-height: 82dvh; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: var(--space-12); padding-block: var(--space-24); }
+.hero > * { min-width: 0; }
 .hero h1 { max-width: 11ch; margin: var(--space-3) 0; font-size: clamp(3rem, 8vw, 7rem); line-height: 0.98; letter-spacing: -0.045em; }
 .eyebrow, .cardOrder, .demoBadge { font-family: var(--font-mono), monospace; letter-spacing: 0.08em; }
 .positioning { max-width: 45rem; font-size: clamp(1.1rem, 2vw, 1.5rem); }
 .primaryLink { display: inline-flex; min-height: 44px; align-items: center; color: var(--accent); font-weight: 700; }
 .section { padding-block: var(--space-16); }
 .section h2 { max-width: 14ch; font-size: clamp(2rem, 4.5vw, 4.5rem); line-height: 1.05; }
-.bento { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
-.card { position: relative; display: flex; min-height: 18rem; flex-direction: column; gap: var(--space-4); padding: var(--space-6); border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--surface); text-decoration: none; }
+.bento { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+.card { position: relative; display: flex; min-width: 0; min-height: 18rem; flex-direction: column; gap: var(--space-4); padding: var(--space-6); border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--surface); text-decoration: none; }
 .card[data-size="large"] { min-height: 26rem; }
 .card:hover, .card:focus-visible { border-color: var(--accent); transform: translateY(-4px); }
 .card h3 { margin-top: auto; font-size: clamp(1.5rem, 3vw, 2.5rem); }

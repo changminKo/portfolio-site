@@ -2,14 +2,33 @@
 
 import "@stackflow/plugin-basic-ui/index.css";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { getStackflowStatus, resetStackflowStatus, subscribeStackflowStatus } from "./stackflow-status-store";
 import { Stack } from "./stackflow.instance";
-import { StackflowStatusProvider, useStackflowStatus } from "./StackflowStatus";
+import { StackflowStatusProvider } from "./StackflowStatus";
 import styles from "./stackflow-demo.module.css";
 
+function hideDecorativeButtons(container: HTMLElement) {
+  container.querySelectorAll("button").forEach((button) => {
+    if (button.textContent?.trim() || button.getAttribute("aria-label")) return;
+    button.setAttribute("aria-hidden", "true");
+    button.setAttribute("tabindex", "-1");
+  });
+}
+
 function Phone() {
-  const { status } = useStackflowStatus();
-  return <><div className={styles.phone} aria-label="웹뷰 스택 탐색 데모"><Stack /></div><p aria-live="polite">stack depth {status.depth} · {status.last}</p></>;
+  const status = useSyncExternalStore(subscribeStackflowStatus, getStackflowStatus, getStackflowStatus);
+  const phoneRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    resetStackflowStatus();
+    const container = phoneRef.current;
+    if (!container) return;
+    hideDecorativeButtons(container);
+    const observer = new MutationObserver(() => hideDecorativeButtons(container));
+    observer.observe(container, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+  return <><div ref={phoneRef} className={styles.phone} aria-label="웹뷰 스택 탐색 데모"><Stack /></div><p aria-live="polite">stack depth {status.depth} · {status.last}</p></>;
 }
 
 export default function StackflowDemo() {
