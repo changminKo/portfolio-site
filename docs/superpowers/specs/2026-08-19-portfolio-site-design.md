@@ -1,0 +1,521 @@
+# 포트폴리오 사이트 설계
+
+## 1. 개요·목표
+
+### 제품 정의
+
+이 사이트는 7년 11개월차 프론트엔드 엔지니어 고창민의 이직·채용용 한국어 포트폴리오다. 핵심 포지셔닝은 **“측정으로 증명하는 성능 엔지니어”**이며, 방문자가 3분 안에 다음 세 가지를 확인하게 한다.
+
+선정한 방향은 **접근안 A: 라이브 케이스스터디**다. 깊이 있는 멀티페이지 글과 세 가지 원리 재현 데모를 결합하며, 에디토리얼 쇼케이스나 원페이지 스크롤 연출보다 실무 문제 해결의 근거를 우선한다.
+
+1. 웹과 웹뷰의 성능 병목을 재현하고 측정할 수 있다.
+2. 대규모 전환·뷰어·개발 워크플로우처럼 여러 시스템이 얽힌 문제를 끝까지 해결한다.
+3. 기술 도입뿐 아니라 도입하지 않을 때의 근거도 설명할 수 있다.
+
+주요 독자는 프론트엔드 채용 담당자, 테크 리드, 실무 면접관이다. 별도의 자기소개 페이지나 장식적인 쇼릴 대신, 사례의 문제·행동·성과와 사이트 자체의 실측 성능을 바로 보여 준다.
+
+### 핵심 컨셉: 이 사이트가 곧 증거
+
+홈 히어로는 정적인 성능 수치를 주장하지 않는다. 현재 방문자의 브라우저에서 측정한 LCP, CLS, INP와 렌더 프레임을 라이브로 표시한다. 서버에서 렌더한 타이포그래피와 소형 클라이언트 측정 패널을 분리하여, 측정 기능 자체가 초기 렌더 성능을 해치지 않게 한다. 값은 브라우저 메모리에서만 처리하고 서버로 전송하지 않는다.
+
+성과 사례에서는 회사 소스 코드, 비공개 데이터, 내부 화면을 공개하지 않는다. 실제 성과 수치는 사례의 증거로 표시하되, 인터랙티브 데모는 같은 원리를 독립적인 가상 데이터와 합성 부하로 재현한다. 실제 수치와 시뮬레이션 결과는 레이블과 시각 영역을 분리해 혼동을 막는다.
+
+### 제품 수준 성공 기준
+
+- 첫 화면만 보고도 “측정으로 증명하는 성능 엔지니어”라는 포지셔닝과 대표 성과 2개를 이해할 수 있다.
+- 홈에서 6개 사례의 문제와 핵심 결과를 훑고, 각 상세 페이지로 이동할 수 있다.
+- freeze, traffic spike, 웹뷰 UX 데모를 회사 코드 없이 직접 조작할 수 있다.
+- 홈 초기 JavaScript는 데모 청크를 제외하고 gzip 기준 150KB 미만이며, 프로덕션 모바일 Lighthouse 측정에서 LCP 1.5초 미만과 Performance 100을 목표로 한다.
+- 키보드, 스크린 리더, `prefers-reduced-motion` 환경에서도 핵심 콘텐츠와 데모 결과에 접근할 수 있다.
+
+### 운영 전제
+
+- 저장소는 `/Users/doyle/orca/projects/some-project`이며 Next.js 애플리케이션 하나로 운영한다.
+- Git 작성자 정보는 저장소 로컬 설정인 `changminKo / rhckdals123@gmail.com`을 사용한다.
+- 원격 저장소는 생성 시 `changminKo` GitHub 계정의 SSH 저장소에 연결하고, 배포는 Vercel이 해당 저장소를 빌드하는 방식으로 구성한다.
+
+## 2. 정보 구조(IA)와 페이지별 명세
+
+### 전체 라우트
+
+사이트는 홈 1개와 정적 생성되는 케이스스터디 6개, 총 7개 공개 페이지로 고정한다.
+
+| 경로 | 목적 | 주요 콘텐츠 | 데모 |
+|---|---|---|---|
+| `/` | 3분 내 역량 요약과 상세 사례 진입 | 히어로, 포지셔닝, 6개 bento 카드, 경력, 연락처 | 없음 |
+| `/work/webview-freeze` | 웹뷰 freeze 진단 과정 설명 | 문제→행동→성과, 원인 흐름도, 실측 지표 | 쿠키 재파싱 freeze |
+| `/work/traffic-spike` | Next.js 트래픽 대응 설명 | 문제→행동→성과, 병목·배포 구조, 실측 지표 | 가상 요청 큐 |
+| `/work/vue-next-migration` | 무중단 프레임워크 전환 설명 | 문제→행동→성과, LB 경로 라우팅 다이어그램 | 없음 |
+| `/work/epub-comic-viewer` | 뷰어·웹뷰 통합 전문성 설명 | 문제→행동→성과, Worker·브릿지 경계도 | Stackflow 웹뷰 UX |
+| `/work/ai-workflow` | 반복 가능한 AI 개발 체계 설명 | 문제→행동→성과, 배포·생성·검증 파이프라인 | 없음 |
+| `/work/isr-redis-cachehandler-poc` | 도입 보류 의사결정 설명 | 문제→행동→성과, 판단 기준 매트릭스 | 없음 |
+
+별도 `/about` 페이지는 만들지 않는다. 이름, 경력, 전문성, 연락처는 홈 안에서 충분히 전달한다. 헤더 내비게이션은 일반 링크와 홈 앵커만 사용한다. 로고/이름은 `/`, 작업은 `/#work`, 경력은 `/#career`, 연락은 `/#contact`로 연결하며, 상세 페이지에서는 “모든 작업” 링크가 `/#work`로 돌아간다.
+
+### 홈 `/`
+
+홈은 다음 순서를 바꾸지 않는다.
+
+#### 1) 히어로
+
+- 서버 렌더 콘텐츠: 이름, 직무, H1 `느낌 대신, 측정으로 증명합니다.`, `TypeScript·React·Next.js·Vue/Nuxt로 제품을 만들고 Docker·Redis까지 병목의 경계를 따라갑니다.`라는 프로필 요약, 케이스스터디 이동 링크.
+- 포지셔닝 한 줄: `측정으로 증명하는 성능 엔지니어 — 웹과 웹뷰의 병목을 숫자로 찾고 결과로 바꿉니다.`
+- `LiveBrowserMetrics` 클라이언트 아일랜드: `useReportWebVitals`의 LCP·CLS·INP와 최근 2초의 렌더 프레임 중앙값(ms)·환산 FPS를 2×2 계기판으로 표시한다. 지표 콜백은 고정 참조로 유지하고 수집값은 컴포넌트의 메모리 상태에만 쓴다.
+- LCP와 CLS는 관찰 직후 갱신하고, INP는 첫 입력 전 `입력 전`, 아직 확정되지 않은 지표는 `측정 중`, 브라우저가 해당 API를 지원하지 않으면 `이 브라우저에서 미지원`으로 표시한다. 숫자가 나타나도 카드 크기가 변하지 않도록 고정 폭 숫자와 최소 높이를 사용한다.
+- 렌더 프레임은 `requestAnimationFrame` 간격을 수집해 최근 120프레임의 중앙값을 4Hz로 화면에 반영한다. 측정 루프는 탭이 숨겨지면 중지하고 다시 보일 때 새 창으로 시작한다.
+- 장식용 blob, 배경 영상, 3D 오브젝트, 의미 없는 파티클은 사용하지 않는다. 얇은 기준선, 숫자, 상태 점, 프레임 눈금이 시각 언어를 담당한다.
+
+#### 2) 케이스스터디 bento 그리드 `#work`
+
+- 카드에는 순번, 제목, 한 문장 문제, 대표 결과, 역할/기술 태그, 상세 링크를 표시한다.
+- 데모가 있는 `webview-freeze`, `traffic-spike`, `epub-comic-viewer` 카드는 `DemoCaseCard`로 렌더하고 더 큰 면적과 `직접 체험` 배지를 갖는다. 데모 자체는 홈에서 실행하지 않아 데모 청크가 홈에 포함되지 않게 한다.
+- 1,024px 이상에서는 12열 그리드를 사용한다. 첫 행은 freeze 6열 + traffic 6열, 둘째 행은 viewer 8열 + migration 4열, 셋째 행은 AI 6열 + ISR 6열이다. 데모 카드는 최소 높이 26rem, 일반 카드는 18rem이며 일반 카드의 콘텐츠 밀도도 낮춘다.
+- 768px에서는 2열로 바꾸고 데모 카드는 2열 전체, 일반 카드는 1열씩 사용한다. 320px에서는 모두 1열이다.
+- 카드 전체가 링크이되 카드 안에 중첩된 링크나 버튼을 두지 않는다. hover 정보는 focus에서도 동일하게 제공한다.
+
+#### 3) 경력 타임라인 `#career`
+
+- `밀리의서재 · 프론트엔드 엔지니어 · 2023.06–현재`와 `디케이테크인(kakao 프로젝트) · 프론트엔드 엔지니어 · 2018.10–2023.06` 두 구간을 최신순으로 표시한다.
+- 각 구간에는 담당 영역을 2문장 이내로 요약하고 연결되는 케이스스터디 링크를 배치한다.
+- 시간축은 장식이 아니라 읽기 순서를 보조하는 1px 선과 연도 표식으로 표현한다. 모바일에서는 단일 세로 열로 유지한다.
+
+#### 4) 연락처 `#contact`
+
+- 문구는 `성능과 구조를 함께 해결할 프론트엔드 엔지니어를 찾고 있다면 이야기해 주세요.`로 고정한다.
+- `메일 보내기`는 `mailto:rhckdals123@gmail.com`, `GitHub 보기`는 `https://github.com/changminKo`로 연결한다.
+- 서버, 데이터베이스, 문의 폼은 두지 않는다. 이메일 복사 버튼을 제공할 경우 성공 상태를 텍스트와 `aria-live="polite"`로 알린다.
+
+### 케이스스터디 공통 페이지 `/work/[slug]`
+
+- `generateStaticParams`로 위 6개 slug만 빌드 시 생성하며, 다른 slug는 404를 반환한다.
+- 상단에는 홈 복귀 링크, 사례 제목, 한 문장 요약, 역할, 기간, 기술, 대표 성과를 둔다.
+- 본문 MDX의 최상위 콘텐츠 순서는 반드시 `문제` → `행동` → `성과`다. `문제`에는 제약과 담당 범위를, `행동`에는 진단 근거와 의사결정을, `성과`에는 수치와 검증 방법을 포함한다.
+- 데모가 있는 페이지는 `행동`의 원리 설명 뒤에 `DemoSlot`을 두고, 바로 아래에 `이 데모는 실제 회사 코드나 트래픽이 아닌 원리 재현용 시뮬레이션입니다.`를 항상 표시한다.
+- 실측 수치는 `EvidenceMetric`으로, 시뮬레이션 출력은 `SimulationMetric`으로 렌더해 배경색·접두 레이블·설명을 구분한다.
+- 본문 폭은 최대 45rem, 도표와 데모는 최대 75rem까지 확장한다. 마지막에는 이전/다음 사례와 `6개 작업 모두 보기` 링크를 둔다.
+- 모든 페이지의 제목, 설명, Open Graph 텍스트는 MDX 메타데이터에서 정적으로 생성한다. 콘텐츠는 한국어 한 벌만 제공한다.
+
+## 3. 케이스스터디 6개 각각의 콘텐츠 개요
+
+### 3.1 안드로이드 웹뷰 10초+ freeze 진단
+
+- **slug:** `webview-freeze`
+- **홈 카드:** 대형 데모 카드, 대표 수치 `메인스레드 9.2s → 2.6s`
+- **문제:** 안드로이드 웹뷰 첫 진입에서 10초 이상 화면이 멈췄다. 렌더 경로를 추적한 결과 `getConfig()`가 호출부 697곳에서 매번 `document.cookie`를 다시 파싱하며 메인스레드를 점유하고 있었다.
+- **행동:** 프로파일링으로 호출 빈도와 Long Task를 연결하고, 쿠키 파싱 결과를 캐시했다. 첫 렌더는 비동기 준비를 기다리지 않도록 동기 시드 값을 제공해 초기 접근 경로를 안정화했다. 본문에는 호출 경로, 캐시 전후 데이터 흐름, 동기 시드의 역할을 순서대로 보여 준다.
+- **성과:** 메인스레드 점유 시간이 9.2초에서 2.6초로 71% 감소했고 Long Task가 4개에서 0개가 됐다. 성과 영역은 측정 환경과 before/after 타임라인을 함께 표시하며, 바로 아래 freeze 데모로 원리를 체험하게 한다.
+
+### 3.2 Next.js 트래픽 스파이크 대응
+
+- **slug:** `traffic-spike`
+- **홈 카드:** 대형 데모 카드, 대표 수치 `P95 15,000ms → 450ms`
+- **문제:** 트래픽 급증 구간에서 서버 응답 지연과 정적 자산 비용이 함께 증가해 P95가 15초까지 치솟고 처리량이 제한됐다.
+- **행동:** Next.js standalone 배포 구조를 재구성하고 서버 번들을 축소했으며, 초기 경로에 불필요한 기능을 lazy loading으로 분리했다. 이미지 전송량과 Web Vitals를 같은 변경 묶음에서 추적해 서버와 클라이언트 최적화가 서로 상쇄되지 않게 했다.
+- **성과:** 처리량 2.7배, P95 15,000ms에서 450ms로 97% 감소, Web Vitals 점수 68에서 88, 이미지 용량 6.69GB에서 1.87GB를 달성했다. 실제 성과 스트립과 별개로 요청 큐 데모가 동시 사용자와 서버 모델 변화가 P95·처리량에 주는 영향을 설명한다.
+
+### 3.3 무중단 Vue→Next.js 전환
+
+- **slug:** `vue-next-migration`
+- **홈 카드:** 일반 카드, 대표 결과 `6개 도메인 · 중단 0건`
+- **문제:** 운영 중인 Vue 서비스 6개 도메인을 한 번에 교체하면 배포 위험과 회귀 범위가 커지고, 두 프레임워크가 공존하는 동안 개발 환경의 요청 경로도 달라질 수 있었다.
+- **행동:** 로드 밸런서에서 경로별로 Vue와 Next.js를 나눠 라우팅해 점진적으로 전환했다. 로컬에서도 운영과 같은 경로 규칙을 재현하는 dev-proxy를 만들어 기능 단위 이관과 롤백이 가능하게 했다.
+- **성과:** 6개 도메인을 서비스 중단 0건으로 전환했다. 본문은 단계별 라우팅 상태와 롤백 경계를 다이어그램으로 보여 주고, “빅뱅 교체” 대신 병행 운영을 선택한 이유를 강조한다.
+
+### 3.4 EPUB/Comic 뷰어와 웹뷰 경계 설계
+
+- **slug:** `epub-comic-viewer`
+- **홈 카드:** 대형 데모 카드, 대표 결과 `DRM 작업 분리 · 브릿지 표준화`
+- **문제:** EPUB/Comic 렌더링, DRM 복호화, 네이티브 웹뷰 통신이 한 실행 경로에 얽히면 무거운 연산이 UI 반응성을 떨어뜨리고 플랫폼별 브릿지 차이가 기능 구현에 누적됐다.
+- **행동:** DRM 복호화를 Web Worker로 옮겨 메인스레드와 계산 경계를 분리하고, 네이티브 호출·응답 계약을 공통 브릿지로 표준화했다. 본문에는 메인스레드, Worker, 네이티브 컨테이너 사이의 메시지 흐름과 실패 경계를 표시한다.
+- **성과:** 복호화 연산과 인터랙션 경로가 분리되고 웹·네이티브 통신의 단일 계약이 만들어졌다. 수치가 확인되지 않은 효과는 숫자로 꾸미지 않으며, 구조적 성과와 책임 경계를 증거로 사용한다. Stackflow 미니 데모는 폰 프레임 안에서 화면 스택과 스와이프백을 직접 보여 줘 웹뷰·하이브리드 UX 역량을 보완한다.
+
+### 3.5 팀 AI 워크플로우 표준화
+
+- **slug:** `ai-workflow`
+- **홈 카드:** 일반 카드, 대표 결과 `생성→테스트→영향분석→배포 표준화`
+- **문제:** API 연동, 테스트 작성, 변경 영향 확인, 배포가 개인별 프롬프트와 수작업에 의존하면 결과의 재현성과 리뷰 기준이 흔들린다.
+- **행동:** Swagger 명세에서 클라이언트 코드를 생성하는 흐름, AI TDD, 멀티에이전트 영향분석을 팀 작업 순서로 연결하고 “밀리 바이브” 배포 파이프라인으로 실행 단계를 정리했다. 각 단계의 입력·출력·사람의 승인 지점을 파이프라인 다이어그램으로 명시한다.
+- **성과:** AI 사용을 단발성 코드 생성이 아니라 반복 가능한 팀 표준과 배포 흐름으로 전환했다. 검증되지 않은 생산성 퍼센트는 제시하지 않고, 표준화된 산출물과 검증 게이트를 성과로 설명한다.
+
+### 3.6 ISR + Redis CacheHandler PoC와 도입 보류
+
+- **slug:** `isr-redis-cachehandler-poc`
+- **홈 카드:** 일반 카드, 대표 결과 `PoC 후 보류 결정`
+- **문제:** Next.js ISR 캐시를 Redis CacheHandler로 공유하는 방안이 실제 운영 이득을 주는지, 추가 인프라와 장애 범위를 감수할 가치가 있는지 검증이 필요했다.
+- **행동:** Redis CacheHandler PoC로 캐시 읽기·쓰기 경로를 구성하고, 기대 이득뿐 아니라 운영 복잡도, 장애 전파 범위, 관측 가능성, 롤백 비용을 같은 의사결정 매트릭스에서 평가했다.
+- **성과:** 구현 가능하다는 이유만으로 도입하지 않고 PoC 이후 채택을 보류했다. 본문은 확인되지 않은 성능 수치를 만들지 않으며, “도입”보다 문제 적합성과 운영 비용을 우선한 판단 과정 자체를 시니어 엔지니어링 성과로 제시한다.
+
+## 4. 데모 3개 상세 설계
+
+### 공통 데모 경계와 로딩 규칙
+
+`DemoSlot`은 MDX가 사용하는 유일한 공통 인터페이스이며 `kind: "freeze" | "traffic" | "stackflow"`만 받는다. 이 컴포넌트의 초기 출력은 제목, 설명, 예상 동작, `데모 불러오기` 버튼을 포함한 가벼운 서버 렌더 셸이다. 작은 클라이언트 래퍼가 다음 중 먼저 발생한 시점에 해당 데모만 불러온다.
+
+1. 사용자가 `데모 불러오기`를 누른다.
+2. 데모 셸이 뷰포트 200px 이내로 들어온다.
+
+세 loader는 변수 경로 없이 리터럴 `import()`로 선언한다.
+
+| kind | 동적 import 대상 | 청크 경계 |
+|---|---|---|
+| `freeze` | `features/demos/freeze/FreezeDemo` | freeze UI, 합성 부하, 관찰 로직 전부 |
+| `traffic` | `features/demos/traffic/TrafficSpikeDemo` | traffic UI와 차트; Worker는 별도 worker 청크 |
+| `stackflow` | `features/demos/stackflow/StackflowDemo` | Stackflow 패키지, Activity, 전용 스타일 전부 |
+
+각 대상은 `next/dynamic`의 `ssr: false`와 고정된 로딩 셸을 사용한다. 이 방식은 세 데모가 서로 다른 비동기 청크가 되게 하고, 홈과 데모 없는 케이스스터디의 초기 의존 그래프에서 제거한다. 데모가 있는 상세 페이지에서도 뷰포트 접근 또는 명시적 버튼 입력 전에는 실제 데모 청크를 요청하지 않는다.
+
+데모끼리 상태를 공유하지 않으며 전역 상태 라이브러리를 도입하지 않는다. 각 데모는 로컬 `useReducer`와 순수 시뮬레이션 함수로 상태를 관리한다. 실행 중 페이지가 숨겨지거나 컴포넌트가 unmount되면 timer, observer, animation frame, Worker를 모두 정리한다. 데모 오류는 해당 셸 안의 오류 상태와 `다시 불러오기`로 격리하며 페이지 본문 탐색은 계속 가능해야 한다.
+
+### 4.1 쿠키 재파싱 freeze 데모
+
+#### 사용자 경험
+
+- 위치: `/work/webview-freeze`의 행동 설명 다음.
+- 상단 segmented control에서 `매번 재파싱`과 `한 번 파싱 후 캐시`를 선택한다.
+- `6초 실행`을 누르면 동일한 이동 인디케이터와 입력 버튼을 두 모드에서 실행한다. `중지`로 즉시 취소할 수 있다.
+- 아래 타임라인은 Long Task의 시작 시점과 지속 시간을 막대로 표시하고, 요약 영역은 Long Task 개수, 총 차단 시간, 최대 프레임 간격을 보여 준다.
+- 데모는 자동 실행하지 않으며 시작 전에 `재파싱 모드는 최대 6초 동안 의도적으로 화면 반응을 늦춥니다.`를 읽을 수 있게 표시한다.
+
+#### 컴포넌트와 상태
+
+| 단위 | 책임 |
+|---|---|
+| `FreezeDemo` | 설명, 모드 선택, 실행/중지, 결과 배치 |
+| `FreezeRunner` | 6초 세션 수명주기와 합성 작업 예약 |
+| `SyntheticCookieSource` | 실제 쿠키 대신 메모리에서 64KB의 `key=value` 문자열 생성 |
+| `LongTaskObserver` | `PerformanceObserver`의 `longtask` 항목을 `{startTime, duration}`으로 수집 |
+| `FrameGapMeter` | `requestAnimationFrame` 간격으로 최대 프레임 지연 계산 |
+| `LongTaskTimeline` | 최대 100개 항목을 SVG가 아닌 고정 DOM 막대로 표현 |
+
+상태는 `mode`, `status: idle | running | complete`, `elapsedMs`, `longTasks`, `totalBlockingMs`, `maxFrameGapMs`로 고정한다. 재파싱 모드는 250ms마다 합성 문자열을 반복 파싱하며 `performance.now()` 기준 한 번에 80ms가 되도록 반복 횟수를 기기 성능에 맞춰 보정한다. 캐시 모드는 시작 시 한 번 파싱한 객체를 같은 주기로 읽고 의도적인 busy loop를 실행하지 않는다. 사용자의 실제 `document.cookie`는 읽거나 변경하지 않는다.
+
+`PerformanceObserver`가 `longtask`를 지원하면 그 결과만 공식 Long Task로 표시한다. 지원하지 않는 브라우저에서는 Long Task 수치를 `미지원`으로 표시하고, `FrameGapMeter`가 감지한 50ms 초과 간격은 `프레임 지연 추정`이라는 별도 레이블로 보여 준다. 두 값을 같은 지표처럼 합치지 않는다.
+
+#### 격리와 안전
+
+- 메인스레드 부하는 사례의 핵심이므로 Worker로 옮기지 않되, 한 세션을 6초로 제한한다.
+- 탭이 숨겨지거나 라우트가 바뀌면 예약 작업을 취소하고 관찰자를 해제한다.
+- 실행 중에도 `중지` 버튼은 화면 맨 앞의 고정 위치에 두며, 키보드 focus를 빼앗지 않는다.
+- 의도적인 freeze 실행 구간은 사이트 일반 INP 성능 예산과 Lighthouse 자동 측정에서 제외한다. 초기·대기 상태는 일반 예산을 충족해야 한다.
+
+### 4.2 트래픽 스파이크 요청 큐 데모
+
+#### 사용자 경험
+
+- 위치: `/work/traffic-spike`의 행동 설명 다음.
+- 동시 사용자 슬라이더는 100–3,000, 간격 100으로 설정한다.
+- 서버 모델은 `최적화 전`과 `최적화 후`를 즉시 전환할 수 있다. 전환할 때 동일한 seed와 동시 사용자 값을 유지해 모델만 비교한다.
+- 최근 60 가상 초의 P95 응답 시간과 처리량을 두 개의 실시간 그래프로 표시하며, 현재값은 숫자와 단위로도 제공한다.
+- 사례에서 측정한 `처리량 2.7배`, `P95 15,000ms→450ms`는 그래프 위 `실제 사례 결과` 스트립에 고정한다. 그래프 값은 `원리 설명용 가상 모델`로 명시하여 실측값처럼 보이지 않게 한다.
+
+#### 시뮬레이션 모델과 상태
+
+각 가상 사용자는 초당 0.2개의 요청을 만든다. 요청은 FIFO 큐에 들어가며 seeded PRNG로 서비스 시간에 ±20% 편차를 준다.
+
+| 모델 | 처리 슬롯 | 평균 서비스 시간 | 이론상 최대 처리량 |
+|---|---:|---:|---:|
+| 최적화 전 | 40 | 250ms | 160 req/s |
+| 최적화 후 | 54 | 125ms | 432 req/s |
+
+최적화 후의 이론상 최대 처리량은 최적화 전의 2.7배다. P95는 완료된 요청의 생성 시점부터 완료 시점까지 걸린 시간을 최근 60 가상 초 범위에서 계산한다. 큐는 최대 30,000개로 제한하고 초과 요청은 `거부됨`으로 집계해 메모리 증가를 막는다. 결과는 실제 시스템 예측값이 아니라, 용량을 넘을 때 대기 시간이 비선형적으로 증가하는 원리를 보여 주는 결정적 시뮬레이션이다.
+
+상태는 `concurrentUsers`, `model`, `status`, `seed`, `series[60]`, `queueDepth`, `rejectedCount`로 고정한다. 슬라이더와 모델은 `useReducer`가 소유하고, 시뮬레이션 계산은 `traffic.worker.ts`가 담당한다. Worker는 가상 시간 250ms마다 최신 표본을 보내며 UI는 4Hz를 넘겨 렌더하지 않는다.
+
+#### 컴포넌트와 격리
+
+| 단위 | 책임 |
+|---|---|
+| `TrafficSpikeDemo` | 컨트롤, 실제/가상 레이블, 그래프 레이아웃 |
+| `TrafficControls` | 동시 사용자와 모델 입력 |
+| `trafficEngine` | 큐, 서비스 슬롯, P95, 처리량을 계산하는 순수 함수 |
+| `traffic.worker` | 고정 seed로 엔진 실행, 표본 전송, 종료 처리 |
+| `MetricCanvas` | 4Hz Canvas 그래프 렌더링 |
+| `MetricSummaryTable` | 현재 P95·처리량·큐 깊이·거부 수의 접근 가능한 텍스트 표 |
+
+Worker는 `new Worker(new URL("./traffic.worker.ts", import.meta.url), { type: "module" })` 경계로 별도 출력하고, 페이지를 나갈 때 `terminate()`한다. Canvas는 정보의 유일한 표현이 아니며 같은 값을 표와 텍스트로 제공한다. `prefers-reduced-motion`에서는 보간 없이 1Hz로 점만 갱신한다.
+
+### 4.3 Stackflow 웹뷰 UX 미니 데모
+
+#### 사용자 경험
+
+- 위치: `/work/epub-comic-viewer`의 브릿지·Worker 구조 설명 다음.
+- 360×720 기준의 반응형 폰 프레임 안에 `서재`, `책 상세`, `리더` 세 Activity를 넣는다.
+- 사용자는 책 카드를 눌러 상세와 리더를 순서대로 push하고, 상단 뒤로가기 또는 화면 왼쪽 가장자리의 스와이프백으로 pop할 수 있다.
+- 프레임 아래에는 현재 stack depth와 마지막 전환(`push` 또는 `pop`)을 텍스트로 표시해 동작을 눈으로만 판단하지 않게 한다.
+- 라이트/다크 테마가 사이트와 동기화되며, reduced motion에서는 전환 시간을 0ms로 바꾸고 화면 상태만 즉시 교체한다.
+
+#### 컴포넌트와 패키지 경계
+
+당근이 제작한 Stackflow의 공식 설치 구성에 맞춰 `@stackflow/config`, `@stackflow/core`, `@stackflow/react`, `@stackflow/plugin-renderer-basic`, `@stackflow/plugin-basic-ui`를 사용한다. 패키지와 기본 UI 스타일은 모두 `StackflowDemo` 비동기 청크 내부에서만 참조한다. Activity는 `ShelfActivity`, `BookActivity`, `ReaderActivity` 세 개로 제한하고 가상 책 데이터 3개를 모듈 내부 상수로 제공한다. Stackflow 공식 설치 구성은 [공식 설치 문서](https://stackflow.so/docs/get-started/installation)를 기준으로 한다.
+
+| 단위 | 책임 |
+|---|---|
+| `StackflowDemo` | 폰 프레임, 테마, reduced-motion, 상태 설명 |
+| `stackflow.config` | Activity 이름, 파라미터, 기본 전환 350ms 정의 |
+| `stackflow.instance` | 세 Activity와 basic renderer/UI plugin 결합 |
+| `ShelfActivity` | 책 목록과 상세 push |
+| `BookActivity` | 책 정보와 리더 push |
+| `ReaderActivity` | 뷰어 모형과 pop 동작 |
+
+폰 프레임은 `isolation: isolate`, `contain: layout paint style`, `overflow: clip`을 적용하고 전용 CSS layer와 CSS Module로 사이트 스타일과 구분한다. 프레임 높이는 작은 화면에서 `min(720px, 75dvh)`로 줄어들며, 내부에 focus가 갇히지 않는다.
+
+Stackflow는 이 미니 데모의 내부 상태 전환에만 사용한다. 사이트 헤더, 홈 앵커, `/work/[slug]` 이동은 모두 Next.js App Router 링크가 담당한다. 두 라우터를 결합할 때 생기는 SEO·SSR 수명주기와 URL 소유권 충돌을 피하기 위해 메인 내비게이션에서 Stackflow 사용을 금지한다.
+
+## 5. 기술 아키텍처
+
+### 기술 선택
+
+| 영역 | 결정 |
+|---|---|
+| 프레임워크 | Next.js App Router + React + TypeScript strict mode |
+| 콘텐츠 | 저장소 내 MDX 6개, 빌드 시 정적 생성 |
+| 모션 | Framer Motion의 `LazyMotion` + `domAnimation`; 필요한 아일랜드에서만 사용 |
+| 테마 | `next-themes`, `class` 기반 라이트/다크/시스템 설정 |
+| 스타일 | CSS custom properties 토큰 + CSS Modules, 전역은 reset·토큰·타이포만 |
+| 단위 테스트 | Vitest + React Testing Library |
+| E2E·시각회귀 | Playwright + `@axe-core/playwright` |
+| 배포 | Vercel production deployment |
+
+백엔드와 런타임 콘텐츠 조회는 없다. 홈, 케이스스터디, 메타데이터는 서버 컴포넌트와 정적 HTML을 기본으로 하고, 테마 토글·라이브 지표·모션·데모만 클라이언트 경계로 둔다.
+
+### 디렉토리 구조
+
+```text
+.
+├── content/
+│   └── work/
+│       ├── webview-freeze.mdx
+│       ├── traffic-spike.mdx
+│       ├── vue-next-migration.mdx
+│       ├── epub-comic-viewer.mdx
+│       ├── ai-workflow.mdx
+│       └── isr-redis-cachehandler-poc.mdx
+├── public/
+│   └── images/work/               # 공개 가능한 자체 제작 도표와 정적 이미지
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── not-found.tsx
+│   │   └── work/
+│   │       └── [slug]/page.tsx
+│   ├── components/
+│   │   ├── chrome/                # Header, ThemeToggle, Footer
+│   │   ├── home/                  # Hero, LiveBrowserMetrics, WorkBento, CareerTimeline, Contact
+│   │   ├── work/                  # CaseStudyLayout, EvidenceMetric, SimulationMetric
+│   │   ├── mdx/                   # MDX 컴포넌트 매핑, 도표, DemoSlot
+│   │   └── motion/                # LazyMotion 경계와 reduced-motion 대체
+│   ├── content/
+│   │   ├── work.schema.ts         # frontmatter 타입과 런타임 검증
+│   │   └── work.registry.ts       # 허용 slug, 순서, MDX loader의 단일 레지스트리
+│   ├── features/
+│   │   └── demos/
+│   │       ├── freeze/            # FreezeDemo, observer, 순수 파서
+│   │       ├── traffic/           # TrafficSpikeDemo, engine, worker, chart
+│   │       └── stackflow/         # StackflowDemo, config, Activity, 전용 스타일
+│   ├── lib/
+│   │   ├── performance/           # Web Vitals와 frame meter
+│   │   └── a11y/                  # motion·announcement 공통 도우미
+│   ├── providers/
+│   │   └── ThemeProvider.tsx
+│   └── styles/
+│       ├── tokens.css
+│       └── globals.css
+├── tests/
+│   ├── unit/                      # 데모 엔진·콘텐츠 스키마
+│   ├── components/                # 지표 상태와 데모 컨트롤
+│   └── e2e/                       # 라우팅, 시각회귀, a11y, 데모 상호작용
+├── mdx-components.tsx
+├── next.config.mjs
+├── playwright.config.ts
+└── vitest.config.ts
+```
+
+### 콘텐츠 모델
+
+각 MDX는 다음 필드를 모두 가진다.
+
+- `slug`: 위 6개 허용값 중 하나이며 파일명과 일치한다.
+- `order`: 홈과 이전/다음 내비게이션에 사용하는 1–6 정수.
+- `title`, `summary`, `role`, `period`: 한국어 문자열.
+- `stack`: 카드와 상세 상단에 쓰는 문자열 배열.
+- `evidence`: `{ label, before?, after?, value?, unit? }[]`; 확인된 실제 성과만 기록한다.
+- `demo`: `freeze`, `traffic`, `stackflow`, `none` 중 하나.
+- `cardSize`: 데모 3개는 `large`, 나머지는 `standard`로 고정한다.
+
+`@next/mdx`는 `remark-frontmatter`로 YAML 블록을 인식하고, 서버 전용 콘텐츠 loader가 `gray-matter`로 메타데이터를 읽는다. `work.schema.ts`가 중복 slug, 누락 필드, 잘못된 demo/cardSize 조합을 빌드 오류로 처리한다. `work.registry.ts`는 메타데이터와 정적 MDX loader를 한곳에서 제공하므로 홈 카드, 정적 경로, 이전/다음 링크가 서로 다른 목록을 갖지 않는다.
+
+### 렌더링·데이터 흐름
+
+1. 빌드가 MDX frontmatter를 검증하고 6개 slug를 정적 생성한다.
+2. 요청에는 정적 HTML, 테마 초기화 스크립트, 해당 페이지의 최소 클라이언트 아일랜드만 전달한다.
+3. 홈에서는 `LiveBrowserMetrics`가 hydration 후 실제 브라우저 지표를 관찰한다. 측정값은 네트워크로 보내지 않는다.
+4. 상세 페이지의 `DemoSlot`은 뷰포트 접근 또는 버튼 입력 후 한 종류의 데모 청크만 import한다.
+5. freeze는 현재 탭에서 제한된 합성 부하를, traffic은 Worker에서 결정적 큐 모델을, Stackflow는 격리된 폰 컨테이너에서 로컬 화면 스택을 실행한다.
+
+### 오류와 복구
+
+- MDX 스키마 오류와 알 수 없는 slug는 빌드 단계에서 차단한다.
+- Web Vitals API 미지원은 지표별 텍스트 상태로 처리하고 나머지 히어로를 유지한다.
+- Worker 생성 실패 시 traffic 데모는 실행하지 않고 원인 없는 무한 로딩 대신 `이 환경에서는 시뮬레이터를 실행할 수 없습니다.`와 재시도 버튼을 표시한다.
+- 동적 import 실패는 해당 데모에만 오류 UI를 보이며, 본문과 사이트 내비게이션은 영향을 받지 않는다.
+- 테마는 시스템 설정을 기본값으로 하고 사용자의 명시적 선택만 localStorage에 저장한다. `next-themes`의 초기 class와 `suppressHydrationWarning` 경계를 사용해 잘못된 테마가 번쩍이는 현상을 막는다.
+
+## 6. 디자인 시스템 방향
+
+### anti-template 원칙
+
+이 사이트의 시각적 정체성은 “프로파일러의 측정 시트”다. 큰 타이포, 정렬된 수치, 기준선, before/after 상태 차이가 주된 그래픽이다. 다음 패턴은 사용하지 않는다.
+
+- 중앙 정렬된 제네릭 SaaS 히어로와 양쪽 CTA 조합
+- 보라색 그라디언트, 유리 효과 카드, 장식 blob, 무관한 3D 오브젝트
+- 모든 섹션에 같은 둥근 카드와 같은 fade-up을 반복하는 템플릿 구성
+- 의미 없이 흐르는 marquee, 무한 자동 애니메이션, 커서를 따라다니는 효과
+- 기술 로고 나열만으로 역량을 표현하는 섹션
+
+대신 1px 측정선, 모노스페이스 숫자, 불균형하지만 규칙이 명확한 bento 면적, 성과의 before/after 대비를 반복 언어로 사용한다. 카드의 크기와 움직임은 정보 중요도를 표현할 때만 달라진다.
+
+### 타이포그래피
+
+- 한국어 본문과 제목: `Noto Sans KR`, `next/font`로 자체 호스팅하고 400·600·700 weight만 포함한다.
+- 지표, 코드, 레이블: `IBM Plex Mono`, 400·500 weight만 포함한다.
+- H1: `clamp(3rem, 8vw, 7rem)`, line-height 0.98, letter-spacing -0.045em.
+- H2: `clamp(2rem, 4.5vw, 4.5rem)`, line-height 1.05.
+- 본문: `clamp(1rem, 0.25vw + 0.95rem, 1.125rem)`, line-height 1.75, 한 줄 최대 45rem.
+- 지표 숫자: tabular numerals를 사용하고 단위는 한 단계 작은 크기로 분리한다.
+
+H1을 단순히 매우 크게 만드는 것으로 끝내지 않고, 한글 본문과 계기판 숫자의 수직 기준선을 맞춘다. 강조는 굵기, 여백, 한 가지 accent 색으로 처리하고 다중 색상 그라디언트 텍스트는 쓰지 않는다.
+
+### 컬러 토큰
+
+색은 역할 기반 custom property로만 사용한다.
+
+| 토큰 | 라이트 | 다크 | 용도 |
+|---|---|---|---|
+| `--bg` | `#F5F4EF` | `#0B0D10` | 페이지 배경 |
+| `--surface` | `#FFFFFF` | `#12161C` | 카드·데모 표면 |
+| `--text` | `#111318` | `#F4F5F0` | 본문·제목 |
+| `--muted` | `#59616C` | `#AAB2BD` | 보조 설명 |
+| `--line` | `#D3D5D1` | `#303641` | 구분선·눈금 |
+| `--accent` | `#2457E6` | `#86A6FF` | 링크·focus·활성 상태 |
+| `--positive` | `#087553` | `#5BD3A5` | 개선·정상 |
+| `--warning` | `#B54708` | `#FFB36B` | 합성 부하·주의 |
+
+라이트는 종이와 측정 기록에 가까운 warm neutral, 다크는 푸른 기가 적은 계기판 배경으로 설계한다. 단순 색상 반전이 아니라 각 테마에서 surface 계층, 선의 강도, 코드 블록, 그래프 색을 따로 검증한다. 텍스트와 인터랙티브 상태는 WCAG 2.2 AA 대비를 충족하고, 색만으로 before/after나 오류를 구분하지 않는다.
+
+### spacing·레이아웃 토큰
+
+- 4px 기반 간격: `4, 8, 12, 16, 24, 32, 48, 64, 96, 128px`만 사용한다.
+- 페이지 최대 폭: 75rem. 좌우 gutter는 320px에서 20px, 768px에서 32px, 1,440px에서 48px.
+- 읽기 본문: 최대 45rem. 히어로·bento·데모: 최대 75rem.
+- 카드 radius는 8px, 데모 폰 프레임만 28px를 사용한다. 과도하게 둥근 pill은 상태 배지와 작은 control에만 허용한다.
+- 섹션 간격은 모바일 64px, 태블릿 96px, 데스크톱 128px로 고정한다.
+
+### 모션 원칙
+
+- Framer Motion은 `LazyMotion`으로 로드하고 `opacity`와 `transform`만 애니메이션한다.
+- 일반 reveal은 180–320ms, Stackflow 데모 내부 전환은 350ms를 넘지 않는다.
+- width, height, top, left, box-shadow blur를 프레임별로 애니메이션하지 않는다.
+- scroll 위치에 종속된 장시간 패럴랙스는 사용하지 않는다.
+- `prefers-reduced-motion: reduce`에서는 reveal을 즉시 최종 상태로 만들고, 자동 스크롤·보간·스와이프 애니메이션을 제거한다. 정보와 조작 자체는 그대로 유지한다.
+
+## 7. 성능·접근성 요구사항
+
+### 성능 예산
+
+| 항목 | 기준 | 측정 범위 |
+|---|---:|---|
+| 홈 초기 JavaScript | gzip `< 150KB` | shared + `/` 초기 청크; 세 데모 비동기 청크 제외 |
+| LCP | `< 1.5s` | Vercel 프로덕션, Lighthouse 모바일 프로필, 냉 캐시 3회 중앙값 |
+| CLS | `< 0.05` | 홈과 6개 상세 페이지 |
+| INP | `< 200ms` | 실제 브라우저 일반 상호작용; 사용자가 시작한 freeze 합성 부하 구간 제외 |
+| Lighthouse | Performance 100 목표 | 홈 프로덕션 빌드, 모바일 프로필 |
+| 접근성 점수 | 100 | 홈과 6개 상세 페이지 |
+
+- 홈은 데모 패키지, Stackflow, traffic Worker를 import graph에 포함하지 않는다. 빌드 manifest로 이를 검증한다.
+- 서버 컴포넌트를 기본으로 하고 클라이언트 지시문은 `ThemeToggle`, `LiveBrowserMetrics`, motion 경계, `DemoSlot`과 실제 데모 내부에만 둔다.
+- 히어로 LCP 후보는 텍스트로 유지한다. 첫 화면에 대형 이미지나 동영상을 두지 않는다.
+- 정적 이미지는 크기를 명시하고 `next/image`의 AVIF/WebP, `sizes`, 지연 로딩을 사용한다. 첫 화면 밖 이미지만 lazy load한다.
+- 폰트는 `next/font`가 자체 호스팅하며 필요한 weight만 포함한다. 본문 fallback metric을 맞춰 폰트 교체로 인한 레이아웃 이동을 막는다.
+- 모든 애니메이션은 컴포지터 친화적인 `opacity`와 `transform`으로 제한한다. 실시간 그래프는 애니메이션 레이아웃이 아니라 제한된 주기의 Canvas redraw로 처리한다.
+- 데모의 timer, observer, Worker, animation frame은 숨김·unmount 시 해제하고 백그라운드 CPU를 사용하지 않는다.
+
+### 접근성 기준
+
+- WCAG 2.2 AA를 제품 기준으로 삼는다.
+- 문서에는 `header`, `nav`, `main`, `section`, `article`, `footer` landmark와 논리적인 H1–H3 순서를 사용한다. 페이지마다 H1은 하나다.
+- 본문 첫 요소로 `본문으로 건너뛰기` 링크를 제공한다.
+- 모든 조작은 키보드로 가능해야 하고 focus indicator는 2px 이상, 주변 색과 3:1 이상 대비를 갖는다.
+- 최소 pointer target은 44×44px이다. hover에서 나타나는 내용은 focus와 정적 텍스트에서도 얻을 수 있다.
+- 테마 토글, 데모 모드, 슬라이더, 시작·중지 버튼은 명시적 label과 현재 상태를 제공한다.
+- 라이브 지표는 매 프레임 announce하지 않는다. `aria-live` 요약은 지표 확정, 데모 완료, 복사 성공, 오류처럼 의미 있는 상태 전환에만 사용한다.
+- 그래프와 타임라인에는 제목, 단위, 현재 수치 표를 제공한다. Canvas·색상·움직임만으로 정보를 전달하지 않는다.
+- freeze 데모는 의도적 지연과 6초 제한을 실행 전에 알리고 언제든 중지할 수 있게 한다.
+- light/dark 모두에서 본문 4.5:1, 큰 텍스트 3:1, UI 경계와 focus 3:1 대비를 충족한다.
+- 200% 확대와 320px 폭에서 수평 페이지 스크롤이 없어야 한다. 폰 데모 내부의 제한된 가로 제스처 영역은 페이지 스크롤과 분리한다.
+
+## 8. 테스트 전략
+
+### 단위 테스트: Vitest
+
+시뮬레이션 로직을 React와 분리해 결정적으로 검증한다.
+
+- freeze 파서: 64KB 합성 문자열 파싱 결과, 캐시가 같은 입력을 다시 파싱하지 않는 것, 실제 `document.cookie`에 접근하지 않는 것을 검증한다.
+- freeze 세션: 6초 상한, 수동 중지, visibility/unmount cleanup, 최대 100개 timeline 항목 제한을 fake timer로 검증한다.
+- Long Task 변환: `PerformanceEntry`를 timeline 좌표와 합계로 바꾸는 계산, API 미지원 상태를 검증한다.
+- traffic engine: 같은 seed의 동일 결과, 사용자가 늘면 동일 모델에서 큐와 P95가 감소하지 않는 성질, 이론상 최대 처리량 160/432 req/s, 큐 30,000개 상한과 거부 집계를 검증한다.
+- traffic Worker protocol: 시작, 설정 변경, 표본, 종료 메시지의 타입과 잘못된 payload 거부를 검증한다.
+- 콘텐츠 스키마: 정확히 6개 slug, order 1–6 유일성, demo와 cardSize 조합, evidence 필드 유효성을 검증한다.
+
+### 컴포넌트 테스트
+
+- `LiveBrowserMetrics`가 `측정 중`→숫자, `입력 전`, `미지원` 상태를 레이아웃 이동 없이 표시하는지 검증한다.
+- `DemoSlot`이 초기에는 실제 데모를 import하지 않고 버튼 또는 intersection 이후 한 종류만 import하는지 검증한다.
+- 세 데모의 label, keyboard control, reduced-motion 분기, 오류·재시도 상태를 React Testing Library로 검증한다.
+- 테마 선택이 system/light/dark 사이에서 일관되고 hydration 전후 접근 가능한 이름이 바뀌지 않는지 검증한다.
+
+### Playwright 기능·시각회귀
+
+기본 시각회귀는 7개 공개 라우트 × 3개 viewport × 2개 테마, 총 42개의 full-page snapshot으로 고정한다.
+
+| viewport 이름 | 크기 |
+|---|---|
+| mobile | `320 × 800` |
+| tablet | `768 × 1024` |
+| desktop | `1440 × 1000` |
+
+Playwright 전용 빌드는 `NEXT_PUBLIC_VISUAL_TEST=1`을 사용한다. 이때 `BrowserMetricSource`, seeded PRNG, animation clock에 고정 fixture를 주입하고 모든 모션을 완료 상태로 만들어 이미지 차이를 결정적으로 만든다. 이 환경 변수는 preview와 production 빌드에는 설정하지 않는다. 데모 추가 snapshot은 다음 상태를 별도로 기록한다.
+
+- freeze: idle, 재파싱 완료, 캐시 완료, API 미지원.
+- traffic: 동시 사용자 1,500의 최적화 전/후를 같은 seed로 실행한 상태.
+- Stackflow: 서재, 책 상세, 리더, reduced-motion 상태.
+
+기능 E2E는 홈 앵커, 6개 상세 링크, 이전/다음 사례, 테마 유지, 404, 세 데모의 핵심 조작, 데모 종료 후 cleanup을 검증한다. Stackflow는 버튼 push/pop과 pointer swipe-back을 각각 검사하고, 메인 브라우저 URL이 데모 조작으로 바뀌지 않는 것도 확인한다.
+
+### 자동 접근성 검사
+
+- `@axe-core/playwright`를 7개 라우트의 라이트·다크 테마, 총 14개 기본 상태에서 실행한다.
+- 데모는 idle과 대표 완료 상태에서도 axe를 실행한다.
+- `critical`과 `serious` 위반은 0건이어야 하며 예외 allowlist를 두지 않는다.
+- 자동 검사와 별개로 CI E2E에서 Tab 순서, skip link, focus visible, Escape/중지 동작, 200% 확대 시 수평 overflow를 확인한다.
+
+### 성능·번들 회귀
+
+- Vercel과 같은 production build로 Lighthouse CI를 실행해 홈 LCP, CLS, Performance, Accessibility 예산을 확인한다.
+- 빌드 manifest에서 홈 초기 청크 gzip 합계가 150KB 미만인지 계산한다.
+- 홈 초기 청크에 `features/demos`, `@stackflow`, `traffic.worker`가 없고, 각 데모가 서로 다른 비동기 청크인지 검사한다.
+- Lighthouse는 freeze 데모를 실행하지 않은 대기 상태에서 측정한다. 의도적 합성 부하 결과는 Vitest와 Playwright 기능 테스트로 따로 검증한다.
+
+## 9. 비범위(non-goals)
+
+- Stackflow를 사이트의 메인 내비게이션, URL 라우팅, 페이지 전환에 사용하지 않는다. `/`와 `/work/[slug]`는 Next.js App Router가 소유한다.
+- 영문판과 언어 전환 UI를 만들지 않는다. 콘텐츠, 메타데이터, 접근성 레이블은 한국어 단일이다.
+- CMS, 관리자 화면, 데이터베이스, 런타임 콘텐츠 API를 만들지 않는다. 6개 케이스스터디는 저장소의 MDX로 관리한다.
+- 별도 `/about` 페이지를 만들지 않는다. 프로필과 경력은 홈에 포함한다.
+- 문의 폼, 인증, 계정, 댓글, 뉴스레터, 블로그 기능을 만들지 않는다. 연락은 이메일과 GitHub 외부 링크로 제한한다.
+- 회사 소스 코드, 내부 저장소 코드, 실사용자 데이터, 실제 쿠키, 실제 트래픽을 포함하지 않는다.
+- traffic 데모를 실제 부하 테스트 도구나 서버 용량 예측기로 제공하지 않는다. 결정적 가상 큐로 원리만 설명한다.
+- freeze 데모에서 방문자의 쿠키를 읽거나 6초를 넘는 메인스레드 부하를 만들지 않는다.
+- 데모를 홈 카드 안에서 실행하거나 홈 초기 번들에 포함하지 않는다.
+- 장식 blob, 배경 영상, WebGL/3D 장면, 무한 marquee, 패럴랙스 쇼릴을 만들지 않는다.
+- 커스텀 도메인 구매와 방문자 추적용 서드파티 분석 도구를 포함하지 않는다. 배포 대상은 Vercel, Git 원격 계정은 `changminKo`로 확정되어 있으며 제품 코드는 이 전제를 따른다.
