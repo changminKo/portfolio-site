@@ -9,23 +9,40 @@ stack: [TypeScript, Next.js, Docker, Web Vitals]
 evidence:
   - { label: P95, before: "15000", after: "450", unit: ms }
   - { label: 처리량, value: "2.7배" }
-  - { label: 이미지, before: "6.69", after: "1.87", unit: GB }
+  - { label: Web Vitals, before: "68", after: "88", unit: 점 }
+  - { label: 배포 이미지, before: "6.69", after: "1.87", unit: GB }
 demo: traffic
 cardSize: large
 ---
 
 ## 문제
 
-트래픽 급증 구간에서 서버 응답 지연과 정적 자산 비용이 함께 증가해 P95가 15초까지 치솟고 처리량이 제한됐습니다.
+v4 스토리 페이지가 트래픽 스파이크에서 무너졌습니다. P95가 15초까지 올라가고 처리량이 더는 늘지 않았습니다.
+
+제약이 하나 있었습니다. **인프라 증설 없이** 해결해야 했습니다. 서버를 늘려 해결하는 선택지가 빠지면 남는 건 요청당 비용을 줄이는 일뿐입니다. 여기에 Web Vitals 개선까지 함께 요구됐습니다.
 
 ## 행동
 
-Next.js standalone 배포를 재구성하고 서버 번들을 축소했습니다. 초기 경로의 비핵심 기능을 lazy loading으로 분리하고 이미지 전송량과 Web Vitals를 같은 변경 묶음에서 추적했습니다.
+서버와 클라이언트를 따로 고치면 한쪽 개선이 다른 쪽에 상쇄될 수 있어 같은 변경 묶음에서 함께 추적했습니다.
+
+- 배포 이미지를 standalone 출력으로 재구성하고, 동적 import 분리와 의존성 정리로 서버 번들을 축소했습니다.
+- IntersectionObserver 기반 lazy loading으로 초기 로딩 시 뷰포트 밖 이미지 요청을 제거했습니다.
+- Skeleton UI로 LCP 후보를 앞당겼습니다.
 
 <div data-wide role="img" aria-label="요청 큐가 축소된 standalone 서버 번들과 지연 로딩 정적 자산으로 분기되는 최적화 구조"><code>요청 큐 → standalone 서버 → 축소된 server bundle<br />브라우저 → 핵심 route chunk + 필요 시 lazy chunk → 최적화 이미지</code></div>
+
+각 변경은 추정으로 두지 않고 부하테스트로 검증했습니다. 아래 데모는 실측 재생이 아니라, 처리 용량을 넘어설 때 대기 시간이 비선형으로 늘어나는 원리를 결정적 가상 큐로 보여 줍니다. 동시 사용자를 올리면서 서버 모델을 바꿔 보면 같은 부하에서 용량이 어떤 차이를 만드는지 확인할 수 있습니다.
 
 <DemoSlot kind="traffic" />
 
 ## 성과
 
-처리량은 2.7배, P95는 15,000ms에서 450ms로 개선됐습니다. Web Vitals 점수는 68에서 88, 이미지 용량은 6.69GB에서 1.87GB로 줄었습니다. 데모의 값은 실측 재생이 아니라 결정적 가상 큐의 출력입니다.
+Locust로 STG 환경에서 동시 800 유저, `/v4/story` 시나리오를 동일 조건으로 전후 비교했습니다.
+
+- 동일 인프라에서 처리량 2.7배 (평균 RPS 200 → 540)
+- P50: 2,000ms → 200ms (−90%) · P95: 15,000ms → 450ms (−97%)
+- 스파이크 시 최대 응답: 30초 → 1.8초, 에러율 0%
+- Web Vitals: 68 → 88
+- First Load JS: 504KB → 424KB (−16%), 배포 이미지: 6.69GB → 1.87GB
+
+증설 없이 처리량을 올려야 하는 조건에서는 서버 응답과 프론트엔드 자산을 한 묶음으로 보는 편이 유리했습니다. 둘을 따로 측정하면 개선이 상쇄되는 걸 놓치기 쉽습니다.
