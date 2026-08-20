@@ -8,7 +8,11 @@
   grid-template-columns: minmax(0, 1fr);
   align-content: center;
   gap: var(--space-8);
-  min-height: min(68dvh, 44rem);
+  /*
+   * min-height 로 뷰포트 비율을 강제하면 콘텐츠보다 컨테이너가 커져
+   * align-content: center 가 위아래로 빈 공간을 분산시킨다. 높이는 콘텐츠가 정하고
+   * 여백은 패딩으로만 준다.
+   */
   padding-block: var(--space-12) var(--space-16);
 }
 

@@ -10,12 +10,16 @@ export function CaseStudyLayout({ work, previous, next, children }: Props) {
   return (
     <article className={styles.article}>
       <header className={styles.header}>
-        <Link href="/#work">← 모든 작업</Link>
-        <p>{work.role} · {work.period}</p>
+        {/* 화살표는 CSS ::before 가 그린다 */}
+        <Link href="/#work">모든 작업</Link>
+        <p className={styles.meta}>{work.role} · {work.period}</p>
         <h1>{work.title}</h1>
-        <p>{work.summary}</p>
-        <p>{work.stack.join(" · ")}</p>
-        <ul className={styles.evidenceList}>{work.evidence.map((evidence) => <EvidenceMetric key={evidence.label} evidence={evidence} />)}</ul>
+        <p className={styles.summary}>{work.summary}</p>
+        <p className={styles.stack}>{work.stack.join(" · ")}</p>
+        <p className={styles.evidenceCaption} id="evidence-caption">실제 사례 결과</p>
+        <ul className={styles.evidenceList} aria-labelledby="evidence-caption">
+          {work.evidence.map((evidence) => <EvidenceMetric key={evidence.label} evidence={evidence} />)}
+        </ul>
       </header>
       <div className={styles.prose}>{children}</div>
       <nav className={styles.adjacent} aria-label="케이스스터디 이동">

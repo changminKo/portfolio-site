@@ -29,7 +29,7 @@
 
 /* ── 성과 지표 ──────────────────────────────────────────── */
 
-.evidenceList { display: grid; gap: var(--space-2); margin: var(--space-8) 0 0; padding: 0; list-style: none; }
+.evidenceList { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
 
 .evidence, .simulation {
   display: flex;
@@ -153,3 +153,30 @@
 @media (prefers-reduced-motion: no-preference) {
   .adjacent a, .header > a { transition: border-color 160ms var(--ease-out), color 160ms var(--ease-out), background-color 160ms var(--ease-out); }
 }
+
+/* ── 헤더 메타 ──────────────────────────────────────────── */
+
+.meta, .stack {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+}
+
+.summary { margin: 0 0 var(--space-6); font-size: 1.05rem; line-height: 1.7; }
+
+.evidenceCaption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-8) 0 var(--space-2);
+  color: var(--positive);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.evidenceCaption::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--positive) 30%, transparent); }
