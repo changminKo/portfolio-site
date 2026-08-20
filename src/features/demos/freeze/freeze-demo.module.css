@@ -1,11 +1,212 @@
-.demo { display: grid; gap: var(--space-4); }
-.demo button, .demo label { min-height: 44px; }
-.warning { color: var(--warning); font-weight: 700; }
-.indicator, .runningIndicator { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); }
-.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-3); }
-.summary div { padding: var(--space-3); border: 1px solid var(--line); }
-.summary dd { margin: var(--space-2) 0 0; font-family: var(--font-mono), monospace; }
-.timeline { display: grid; gap: var(--space-2); padding: 0; list-style: none; }
-.timeline li { min-height: 28px; background: color-mix(in srgb, var(--warning) 24%, var(--surface)); font-family: var(--font-mono), monospace; }
-@media (prefers-reduced-motion: no-preference) { .runningIndicator { animation: move 900ms ease-in-out infinite alternate; } }
-@keyframes move { to { transform: translateX(min(60vw, 560px)); } }
+/*
+ * freeze 데모. 의도적으로 메인스레드를 막는 실험이므로 컨트롤이 무엇을 하는지,
+ * 지금 무슨 일이 벌어지는지가 텍스트로도 읽혀야 한다.
+ */
+
+.demo { display: grid; gap: var(--space-6); }
+
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
+  border-radius: var(--card-radius);
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.warning::before { content: "!"; flex: none; font-family: var(--font-mono), monospace; font-weight: 700; }
+
+/* ── 모드 선택: radio 를 세그먼티드 컨트롤로 ─────────────── */
+
+.demo fieldset {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.demo legend {
+  padding: 0;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.demo fieldset > label {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--card-radius);
+  background: var(--surface);
+  font-size: 0.925rem;
+  cursor: pointer;
+}
+
+.demo fieldset > label:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.demo fieldset > label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.demo input[type="radio"] {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.demo fieldset:disabled > label { opacity: 0.55; cursor: not-allowed; }
+
+/* ── 실행 / 중지 ────────────────────────────────────────── */
+
+.demo > button {
+  justify-self: start;
+  min-height: 44px;
+  padding-inline: var(--space-6);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--surface-raised);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.demo > button:hover { background: color-mix(in srgb, var(--accent) 85%, var(--text)); }
+
+/* ── 실행 인디케이터: 블로킹을 눈으로 확인하는 장치 ─────── */
+
+.indicator, .runningIndicator {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-deep);
+  overflow: hidden;
+}
+
+.indicator::after, .runningIndicator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transform: translateY(-50%);
+}
+
+.runningIndicator::after { background: var(--warning); }
+
+.elapsed {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+/* ── 결과 지표 ──────────────────────────────────────────── */
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.summary div {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--card-radius);
+  background: var(--surface);
+}
+
+.summary dt {
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.summary dd {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ── Long Task 타임라인 ─────────────────────────────────── */
+
+.timeline {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--card-radius);
+  background: var(--bg-deep);
+  list-style: none;
+}
+
+.timeline:empty { display: none; }
+
+.timeline li {
+  display: flex;
+  min-height: 22px;
+  align-items: center;
+  padding-inline: var(--space-2);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--warning) 30%, var(--surface));
+  color: var(--text);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+/* 타임라인이 비었을 때의 안내 */
+.empty {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px dashed var(--line);
+  border-radius: var(--card-radius);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.note { margin: 0; color: var(--muted); font-size: 0.8rem; line-height: 1.6; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .runningIndicator::after { animation: slide 900ms ease-in-out infinite alternate; }
+  .demo > button, .demo fieldset > label { transition: background-color 150ms var(--ease-out), border-color 150ms var(--ease-out), color 150ms var(--ease-out); }
+}
+
+@keyframes slide { to { left: calc(100% - 32px); } }
+
+@media (min-width: 600px) {
+  .demo fieldset { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .demo legend { grid-column: 1 / -1; }
+}

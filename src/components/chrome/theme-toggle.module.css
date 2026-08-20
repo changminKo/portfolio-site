@@ -3,8 +3,14 @@
  * 나머지는 배경에 눕힌다.
  */
 
+/*
+ * 200% 확대 + 320px 처럼 폭이 극단적으로 좁아지는 조건에서 세 옵션이 한 줄에
+ * 들어가지 않는다. 접힘을 허용하고 패딩을 줄여 페이지 수평 스크롤을 만들지 않는다.
+ */
 .group {
   display: inline-flex;
+  max-width: 100%;
+  flex-wrap: wrap;
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -54,4 +60,8 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .option { transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out); }
+}
+
+@media (max-width: 420px) {
+  .option { padding-inline: var(--space-2); font-size: 0.68rem; }
 }

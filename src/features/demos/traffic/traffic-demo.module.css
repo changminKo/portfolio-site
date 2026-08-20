@@ -1,9 +1,243 @@
+/*
+ * traffic 데모. 실측 사례 수치와 가상 시뮬레이션 값을 시각적으로 분리하는 것이
+ * 이 화면의 첫 번째 책임이다. 섞이면 사례의 신뢰가 깎인다.
+ */
+
 .demo { display: grid; gap: var(--space-6); }
-.actual, .metrics, .graphs { display: grid; gap: var(--space-3); }
-.actual { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); padding: var(--space-4); border: 1px solid var(--positive); }
-.demo input[type="range"] { width: 100%; min-height: 44px; }
-.demo label, .demo button { min-height: 44px; }
-.graphs canvas { width: 100%; height: auto; border-bottom: 1px solid var(--line); }
-.demo table { width: 100%; border-collapse: collapse; }
-.demo th, .demo td { padding: var(--space-3); border: 1px solid var(--line); text-align: right; font-family: var(--font-mono), monospace; }
-@media (min-width: 768px) { .graphs, .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ── 실측 사례 결과: 초록 계열로 못 박는다 ──────────────── */
+
+.actual {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--positive) 45%, transparent);
+  border-left: 3px solid var(--positive);
+  border-radius: var(--card-radius);
+  background: var(--positive-soft);
+}
+
+.actual strong {
+  color: var(--positive);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.actual span {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.925rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 시뮬레이션 구획 라벨 ───────────────────────────────── */
+
+.simLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--warning);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.simLabel::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--warning) 35%, transparent); }
+
+/* ── 컨트롤 ─────────────────────────────────────────────── */
+
+.controls { display: grid; gap: var(--space-4); }
+
+.sliderRow { display: grid; gap: var(--space-2); }
+
+.sliderRow > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sliderRow output {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.demo input[type="range"] {
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.demo fieldset {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.demo legend {
+  padding: 0;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.demo fieldset > label {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--card-radius);
+  background: var(--surface);
+  font-size: 0.925rem;
+  cursor: pointer;
+}
+
+.demo fieldset > label:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.demo fieldset > label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.demo input[type="radio"] { flex: none; width: 14px; height: 14px; margin: 0; accent-color: var(--accent); }
+
+/* ── 그래프 ─────────────────────────────────────────────── */
+
+.graphs { display: grid; gap: var(--space-3); }
+
+.graph {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--card-radius);
+  background: var(--bg-deep);
+}
+
+.graphHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.graphHead b {
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.graphHead span {
+  color: var(--text);
+  font-family: var(--font-mono), monospace;
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.graphs canvas { display: block; width: 100%; height: 88px; }
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+}
+
+/* ── 수치 표 ────────────────────────────────────────────── */
+
+.tableWrap { overflow-x: auto; }
+
+.demo table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+.demo caption {
+  margin-bottom: var(--space-2);
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.demo th, .demo td {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.demo th {
+  background: var(--bg-deep);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── 오류 상태 ──────────────────────────────────────────── */
+
+.error {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  padding: var(--space-4);
+  border: 1px dashed color-mix(in srgb, var(--warning) 50%, transparent);
+  border-radius: var(--card-radius);
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: 0.9rem;
+}
+
+.error button {
+  min-height: 44px;
+  padding-inline: var(--space-4);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.note { margin: 0; color: var(--muted); font-size: 0.8rem; line-height: 1.6; }
+
+@media (min-width: 600px) {
+  .demo fieldset { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .demo legend { grid-column: 1 / -1; }
+}
+
+@media (min-width: 768px) {
+  .graphs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .demo fieldset > label { transition: background-color 150ms var(--ease-out), border-color 150ms var(--ease-out), color 150ms var(--ease-out); }
+}

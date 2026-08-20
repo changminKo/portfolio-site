@@ -70,7 +70,14 @@
   font-weight: 500;
   letter-spacing: -0.04em;
   line-height: 1.15;
-  white-space: nowrap;
+}
+
+/*
+ * 좁은 화면에서는 줄바꿈을 허용해야 한다. nowrap 을 무조건 걸면
+ * "8.3ms · 120 FPS" 같은 값이 320px 에서 컨테이너를 넘친다.
+ */
+@media (min-width: 420px) {
+  .panel strong { white-space: nowrap; }
 }
 
 /*

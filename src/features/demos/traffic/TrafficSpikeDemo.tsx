@@ -2,7 +2,6 @@
 
 import { useReducedMotion } from "framer-motion";
 import { useEffect, useReducer, useRef, useState } from "react";
-import { SimulationMetric } from "@/components/work/SimulationMetric";
 import type { ServerModel, TrafficSample } from "./traffic-engine";
 import type { TrafficWorkerOut } from "./traffic-protocol";
 import { MetricCanvas } from "./MetricCanvas";
@@ -46,13 +45,31 @@ export default function TrafficSpikeDemo() {
   return (
     <div className={styles.demo} data-testid="traffic-demo" data-demo-chunk="demo-chunk:traffic" data-reduced-motion={reducedMotion}>
       <div className={styles.actual}><strong>실제 사례 결과</strong><span>P95 15,000ms → 450ms</span><span>처리량 2.7배</span></div>
-      <p>원리 설명용 가상 모델</p>
-      <div>동시 사용자 <output>{state.users}</output><input aria-label="동시 사용자" type="range" min="100" max="3000" step="100" value={state.users} onChange={(event) => { const users = Number(event.target.value); dispatch({ type: "users", value: users }); configure(users, state.model); }} /></div>
-      <fieldset><legend>서버 모델</legend>{(["before", "after"] as const).map((model) => <label key={model}><input type="radio" name="server-model" checked={state.model === model} onChange={() => { dispatch({ type: "model", value: model }); configure(state.users, model); }} />{model === "before" ? "최적화 전" : "최적화 후"}</label>)}</fieldset>
-      {error ? <div role="alert"><p>{error}</p><button type="button" onClick={() => { setError(""); setWorkerKey((key) => key + 1); }}>다시 불러오기</button></div> : <>
-        <div className={styles.graphs}><MetricCanvas series={state.series} metric="p95Ms" label="최근 60초 P95 그래프" /><MetricCanvas series={state.series} metric="throughput" label="최근 60초 처리량 그래프" /></div>
-        <div className={styles.metrics}><SimulationMetric label="P95" value={state.sample.p95Ms} unit="ms" /><SimulationMetric label="처리량" value={state.sample.throughput} unit=" req/s" /></div>
-        <table><caption>현재 가상 요청 큐 수치</caption><thead><tr><th>P95</th><th>처리량</th><th>큐 깊이</th><th>거부</th></tr></thead><tbody><tr><td>{state.sample.p95Ms}ms</td><td>{state.sample.throughput} req/s</td><td>{state.sample.queueDepth}</td><td>{state.sample.rejectedCount}</td></tr></tbody></table>
+      <p className={styles.simLabel}>원리 설명용 가상 모델</p>
+      <div className={styles.controls}>
+        {/* label 로 감싸면 <output> 도 labelable 이라 접근 가능 이름이 중복 매칭된다 */}
+        <div className={styles.sliderRow}>
+          <span>동시 사용자 <output>{state.users}</output></span>
+          <input aria-label="동시 사용자" type="range" min="100" max="3000" step="100" value={state.users} onChange={(event) => { const users = Number(event.target.value); dispatch({ type: "users", value: users }); configure(users, state.model); }} />
+        </div>
+        <fieldset><legend>서버 모델</legend>{(["before", "after"] as const).map((model) => <label key={model}><input type="radio" name="server-model" checked={state.model === model} onChange={() => { dispatch({ type: "model", value: model }); configure(state.users, model); }} />{model === "before" ? "최적화 전" : "최적화 후"}</label>)}</fieldset>
+      </div>
+      {error ? <div className={styles.error} role="alert"><p>{error}</p><button type="button" onClick={() => { setError(""); setWorkerKey((key) => key + 1); }}>다시 불러오기</button></div> : <>
+        <div className={styles.graphs}>
+          <div className={styles.graph}>
+            <div className={styles.graphHead}><b>P95 응답</b><span>{state.sample.p95Ms}ms</span></div>
+            <MetricCanvas series={state.series} metric="p95Ms" label="최근 60초 P95 그래프" />
+            <div className={styles.axis}><span>-60초</span><span>지금</span></div>
+          </div>
+          <div className={styles.graph}>
+            <div className={styles.graphHead}><b>처리량</b><span>{state.sample.throughput} req/s</span></div>
+            <MetricCanvas series={state.series} metric="throughput" label="최근 60초 처리량 그래프" />
+            <div className={styles.axis}><span>-60초</span><span>지금</span></div>
+          </div>
+        </div>
+        <div className={styles.tableWrap}>
+          <table><caption>현재 가상 요청 큐 수치</caption><thead><tr><th>P95</th><th>처리량</th><th>큐 깊이</th><th>거부</th></tr></thead><tbody><tr><td>{state.sample.p95Ms}ms</td><td>{state.sample.throughput} req/s</td><td>{state.sample.queueDepth}</td><td>{state.sample.rejectedCount}</td></tr></tbody></table>
+        </div>
       </>}
     </div>
   );

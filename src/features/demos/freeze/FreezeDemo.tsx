@@ -71,9 +71,19 @@ export default function FreezeDemo() {
       </fieldset>
       {state.status !== "running" ? <button type="button" onClick={start}>6초 실행</button> : <button type="button" onClick={() => sessionRef.current?.stop()}>중지</button>}
       <div className={state.status === "running" ? styles.runningIndicator : styles.indicator} data-testid="freeze-indicator" aria-hidden="true" />
-      <p aria-live="polite">{state.status === "complete" ? "실행 완료" : state.status === "running" ? `${Math.round(state.elapsedMs)}ms 실행 중` : "실행 대기"}</p>
+      <p className={styles.elapsed} aria-live="polite">{state.status === "complete" ? "실행 완료" : state.status === "running" ? `${Math.round(state.elapsedMs)}ms 실행 중` : "실행 대기"}</p>
       <dl className={styles.summary}><div><dt>Long Task</dt><dd>{supported ? `${summary.count}개` : "미지원"}</dd></div><div><dt>총 차단 시간</dt><dd>{supported ? `${Math.round(summary.totalBlockingMs)}ms` : "미지원"}</dd></div><div><dt>최대 프레임 간격</dt><dd>{Math.round(state.maxFrameGapMs)}ms</dd></div></dl>
-      {supported ? <LongTaskTimeline entries={summary.entries} /> : <p>50ms 초과 프레임 간격을 프레임 지연 추정으로 확인하세요.</p>}
+      {!supported ? (
+        <p className={styles.note}>이 브라우저는 Long Task 관측을 지원하지 않습니다. 위의 최대 프레임 간격을 프레임 지연 추정으로 참고하세요.</p>
+      ) : summary.entries.length > 0 ? (
+        <LongTaskTimeline entries={summary.entries} />
+      ) : (
+        <p className={styles.empty}>
+          {state.status === "idle"
+            ? "실행하면 50ms를 넘긴 작업이 여기에 막대로 쌓입니다. 두 모드를 번갈아 실행해 차이를 비교해 보세요."
+            : "이 실행에서는 Long Task가 발생하지 않았습니다."}
+        </p>
+      )}
     </div>
   );
 }
