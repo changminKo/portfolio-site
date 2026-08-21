@@ -19,10 +19,18 @@ export function LiveBrowserMetrics({
   fixture?: VisualMetricFixture;
 }) {
   const meter = useMemo(() => frameMeter ?? createFrameMeter(), [frameMeter]);
-  const supported = useMemo(
-    () => fixture ? { LCP: true, CLS: true, INP: true } : support ?? detectVitalSupport(),
-    [fixture, support],
-  );
+  /*
+   * 지원 여부는 첫 렌더에 판정하지 않는다. 서버에는 PerformanceObserver 가 없어
+   * detectVitalSupport() 가 전부 false 를 주고, 클라이언트는 true 를 주기 때문에
+   * 같은 칸의 텍스트가 "미지원"과 "측정 중"으로 갈려 hydration 이 깨진다(React #418).
+   * 서버와 같은 낙관값으로 시작하고 mount 후에 실제 지원 여부로 교체한다.
+   */
+  const [detected, setDetected] = useState<VitalSupport>({ LCP: true, CLS: true, INP: true });
+  useEffect(() => {
+    if (fixture || support) return;
+    setDetected(detectVitalSupport());
+  }, [fixture, support]);
+  const supported = fixture ? { LCP: true, CLS: true, INP: true } : support ?? detected;
   const [values, setValues] = useState<Values>(fixture?.values ?? {});
   const [frame, setFrame] = useState<FrameSnapshot | null>(fixture?.frame ?? null);
   const [announcement, setAnnouncement] = useState("");
