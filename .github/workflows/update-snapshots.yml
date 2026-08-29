@@ -54,6 +54,9 @@ jobs:
           git push origin "HEAD:$TARGET_REF"
       - name: Remove trigger label
         if: always() && github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh pr edit "${{ github.event.pull_request.number }}" --remove-label update-snapshots -R "${{ github.repository }}"
+        # Playwright 이미지에는 gh CLI가 없으므로 REST로 제거한다.
+        run: |
+          curl -sS -f -X DELETE \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/update-snapshots"
