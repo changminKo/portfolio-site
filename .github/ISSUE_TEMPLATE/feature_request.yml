@@ -1,0 +1,28 @@
+name: ✨ 기능 제안
+description: 새 섹션·데모·개선을 제안합니다.
+title: "[Feature] "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 해결하려는 문제
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 제안하는 방식
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 검토한 대안
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 확인 사항
+      options:
+        - label: 접근성(키보드·reduced-motion·대비)에 미치는 영향을 고려했음
+        - label: 번들 예산(`check:chunks`)·CWV에 미치는 영향을 고려했음
