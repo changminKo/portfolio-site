@@ -5,10 +5,23 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # 시각 회귀 스냅샷은 렌더링 환경(OS·폰트·Chromium 빌드)에 묶인다. 러너 이미지 드리프트와
+    # 개발자 macOS 차이를 없애기 위해 Playwright 공식 이미지에 고정한다. 베이스라인은
+    # update-snapshots 워크플로가 같은 이미지에서 생성한다. 버전은 package.json의
+    # @playwright/test와 맞춘다.
+    container:
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -19,7 +32,6 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test:run
@@ -31,3 +43,13 @@ jobs:
       # 영향이 커 Vercel 배포 후 실측으로 판정하기로 결정했다. 리포트는 남기되 job을 막지 않는다.
       - run: pnpm perf:lhci
         continue-on-error: true
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
