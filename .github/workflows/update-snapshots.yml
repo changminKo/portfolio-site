@@ -1,0 +1,48 @@
+name: update-snapshots
+
+# 시각 회귀 베이스라인을 CI와 동일한 Playwright 이미지에서 다시 생성해 현재 브랜치에 커밋한다.
+# 로컬(macOS)에서 만든 스냅샷은 CI와 픽셀이 맞지 않으므로 반드시 이 워크플로로 갱신한다.
+# 보호된 main에서는 실행하지 말고 PR 브랜치에서 실행한다.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-snapshots-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Regenerate baselines
+        run: pnpm exec playwright test tests/e2e/visual.spec.ts tests/e2e/demo-visual.spec.ts --update-snapshots
+      - name: Commit and push
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/e2e/__snapshots__
+          if git diff --cached --quiet; then
+            echo "스냅샷 변경 없음"
+            exit 0
+          fi
+          git commit -m "test(visual): CI 이미지 기준으로 스냅샷 베이스라인 갱신"
+          git push origin HEAD:${{ github.ref_name }}
