@@ -1,0 +1,51 @@
+name: 🐛 버그 리포트
+description: 재현 가능한 버그를 보고합니다.
+title: "[Bug] "
+labels: ["bug", "triage"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: 영역
+      options:
+        - 페이지 / 라우팅
+        - 데모 (인터랙티브 컴포넌트)
+        - MDX 콘텐츠
+        - 스타일 / 테마 / 모션
+        - 접근성
+        - 성능
+        - CI / 빌드
+        - 기타
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 현상
+      description: 기대한 동작과 실제 동작
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: 재현 절차
+      placeholder: |
+        1. /demo 진입
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 로그 / 스크린샷
+  - type: input
+    id: env
+    attributes:
+      label: 환경
+      placeholder: "브라우저·OS, 뷰포트, 다크/라이트, prefers-reduced-motion 여부"
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 확인 사항
+      options:
+        - label: 최신 `main`에서도 재현됨
