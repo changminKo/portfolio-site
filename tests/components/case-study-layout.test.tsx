@@ -14,4 +14,13 @@ it("실측 지표와 문제→행동→성과 본문, 이전·다음 링크를 �
   expect(screen.getByText("15000ms → 450ms")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /다음.*무중단 Vue/ })).toBeInTheDocument();
   expect(screen.getAllByRole("heading", { level: 2 }).map((node) => node.textContent)).toEqual(["문제", "행동", "성과"]);
+  expect(screen.queryByRole("link", { name: "라이브 서비스 열기" })).not.toBeInTheDocument();
+});
+
+it("liveUrl이 있는 사례는 라이브 링크를 새 탭으로 연다", () => {
+  const work = getWork("moi-paper-trading");
+  render(<CaseStudyLayout work={work} {...getAdjacentWorks(work.slug)}><h2>문제</h2></CaseStudyLayout>);
+  const link = screen.getByRole("link", { name: "라이브 서비스 열기" });
+  expect(link).toHaveAttribute("href", "https://moi-app.duckdns.org");
+  expect(link).toHaveAttribute("target", "_blank");
 });

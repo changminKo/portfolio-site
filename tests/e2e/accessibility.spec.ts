@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const routes = ["/", "/work/webview-freeze", "/work/traffic-spike", "/work/vue-next-migration", "/work/epub-comic-viewer", "/work/ai-workflow", "/work/isr-redis-cachehandler-poc"];
+const routes = ["/", "/work/webview-freeze", "/work/traffic-spike", "/work/vue-next-migration", "/work/epub-comic-viewer", "/work/ai-workflow", "/work/isr-redis-cachehandler-poc", "/work/moi-paper-trading"];
 for (const route of routes) for (const theme of ["light", "dark"] as const) {
   test(`axe ${theme} ${route}`, async ({ page }) => {
     await page.addInitScript((value) => localStorage.setItem("theme", value), theme);

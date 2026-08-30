@@ -7,6 +7,7 @@ export const WORK_SLUGS = [
   "epub-comic-viewer",
   "ai-workflow",
   "isr-redis-cachehandler-poc",
+  "moi-paper-trading",
 ] as const;
 
 export type WorkSlug = (typeof WORK_SLUGS)[number];
@@ -28,12 +29,13 @@ const EvidenceSchema = z.object({
 
 export const WorkMetaSchema = z.object({
   slug: z.enum(WORK_SLUGS),
-  order: z.number().int().min(1).max(6),
+  order: z.number().int().min(1).max(WORK_SLUGS.length),
   title: z.string().min(1),
   summary: z.string().min(1),
   role: z.string().min(1),
   period: z.string().min(1),
   stack: z.array(z.string().min(1)).min(1),
+  liveUrl: z.string().url().optional(),
   evidence: z.array(EvidenceSchema).min(1),
   demo: z.enum(["freeze", "traffic", "none"]),
   cardSize: z.enum(["large", "standard"]),
@@ -56,11 +58,12 @@ export function isWorkSlug(value: string): value is WorkSlug {
 export function validateWorkCollection(records: readonly unknown[]): readonly WorkMeta[] {
   const parsed = records.map((record) => WorkMetaSchema.parse(record));
   if (parsed.length !== WORK_SLUGS.length || new Set(parsed.map(({ slug }) => slug)).size !== WORK_SLUGS.length) {
-    throw new Error("6개 허용 slug가 각각 한 번씩 존재해야 합니다");
+    throw new Error(`${WORK_SLUGS.length}개 허용 slug가 각각 한 번씩 존재해야 합니다`);
   }
   const orders = [...parsed].map(({ order }) => order).sort((a, b) => a - b);
-  if (orders.join(",") !== "1,2,3,4,5,6") {
-    throw new Error("order는 1부터 6까지 중복 없이 존재해야 합니다");
+  const expectedOrders = WORK_SLUGS.map((_, index) => index + 1);
+  if (orders.join(",") !== expectedOrders.join(",")) {
+    throw new Error(`order는 1부터 ${WORK_SLUGS.length}까지 중복 없이 존재해야 합니다`);
   }
   return [...parsed].sort((a, b) => a.order - b.order);
 }

@@ -8,6 +8,7 @@ const base: WorkMeta[] = [
   ["epub-comic-viewer", 4, "none", "standard"],
   ["ai-workflow", 5, "none", "standard"],
   ["isr-redis-cachehandler-poc", 6, "none", "standard"],
+  ["moi-paper-trading", 7, "none", "standard"],
 ].map(([slug, order, demo, cardSize]) => ({
   slug,
   order,
@@ -22,8 +23,13 @@ const base: WorkMeta[] = [
 })) as WorkMeta[];
 
 describe("validateWorkCollection", () => {
-  it("정확한 6개 사례를 order 순으로 반환한다", () => {
-    expect(validateWorkCollection([...base].reverse()).map((item) => item.order)).toEqual([1, 2, 3, 4, 5, 6]);
+  it("정확한 7개 사례를 order 순으로 반환한다", () => {
+    expect(validateWorkCollection([...base].reverse()).map((item) => item.order)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+
+  it("liveUrl이 URL 형식이 아니면 거부한다", () => {
+    const invalid = base.map((item) => item.slug === "moi-paper-trading" ? { ...item, liveUrl: "moi-app.duckdns.org" } : item);
+    expect(() => validateWorkCollection(invalid)).toThrow();
   });
 
   it("데모 카드가 standard이면 거부한다", () => {
@@ -33,6 +39,6 @@ describe("validateWorkCollection", () => {
 
   it("중복 order를 거부한다", () => {
     const invalid = base.map((item) => item.slug === "traffic-spike" ? { ...item, order: 1 } : item);
-    expect(() => validateWorkCollection(invalid)).toThrow("order는 1부터 6까지 중복 없이 존재해야 합니다");
+    expect(() => validateWorkCollection(invalid)).toThrow("order는 1부터 7까지 중복 없이 존재해야 합니다");
   });
 });

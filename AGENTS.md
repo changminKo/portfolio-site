@@ -29,7 +29,7 @@ pnpm exec playwright test   # E2E·시각회귀 (Task 14 이후)
 
 Next.js 16 App Router (Turbopack), React 19, TypeScript strict, zod, `@next/mdx` + gray-matter, next-themes, Framer Motion(데모 청크 전용 — 홈 번들에 넣지 말 것), Vitest + React Testing Library, Playwright + axe.
 
-백엔드·데이터베이스·CMS·런타임 콘텐츠 API는 없다. 콘텐츠는 `content/work/*.mdx` 6개가 전부이고 빌드 시 정적 생성된다.
+백엔드·데이터베이스·CMS·런타임 콘텐츠 API는 없다. 콘텐츠는 `content/work/*.mdx` 7개가 전부이고 빌드 시 정적 생성된다.
 
 ## 알려진 함정
 
@@ -43,7 +43,7 @@ Next.js 16 App Router (Turbopack), React 19, TypeScript strict, zod, `@next/mdx`
 ## 아키텍처 제약
 
 - 서버 컴포넌트가 기본. 클라이언트 경계는 `ThemeToggle`, `LiveBrowserMetrics`, motion 경계, `DemoSlot`과 데모 내부로 제한한다.
-- 공개 라우트는 `/`와 `/work/[slug]` 6개, 총 7개로 고정. `/about`과 영문판은 만들지 않는다.
+- 공개 라우트는 `/`와 `/work/[slug]` 7개, 총 8개로 고정. `/about`과 영문판은 만들지 않는다.
 - 데모 2개(freeze·traffic)는 각각 별도 비동기 청크다. 홈의 import graph에 데모 코드가 들어가면 안 된다.
 - 콘텐츠 slug·순서·MDX loader는 `src/content/work.registry.ts` 한 곳에서만 정의한다. 목록을 다른 파일에 복제하지 않는다.
 - 실측 성과 수치와 시뮬레이션 결과는 `EvidenceMetric` / `SimulationMetric`으로 분리해 렌더한다. 데모 출력이 실측값처럼 보이면 안 된다.

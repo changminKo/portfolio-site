@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("홈에서 여섯 사례와 앵커를 탐색한다", async ({ page }) => {
+test("홈에서 일곱 사례와 앵커를 탐색한다", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: /케이스스터디 보기/ })).toHaveCount(6);
+  await expect(page.getByRole("link", { name: /케이스스터디 보기/ })).toHaveCount(7);
   await page.getByRole("link", { name: "경력" }).click();
   await expect(page.locator("#career")).toBeInViewport();
   await page.getByRole("link", { name: /안드로이드 웹뷰.*케이스스터디 보기/ }).click();

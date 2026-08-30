@@ -41,7 +41,7 @@
   line-height: 1.7;
 }
 
-.eyebrow, .cardOrder, .demoBadge {
+.eyebrow, .cardOrder, .demoBadge, .liveBadge {
   font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
   letter-spacing: 0.14em;
@@ -128,6 +128,15 @@
   border-radius: 999px;
   background: var(--warning-soft);
   color: var(--warning);
+  font-size: 0.7rem;
+}
+
+.liveBadge {
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-2);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
   font-size: 0.7rem;
 }
 
