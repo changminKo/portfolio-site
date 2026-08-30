@@ -7,13 +7,18 @@ updates:
       day: monday
       time: "09:00"
       timezone: Asia/Seoul
-    open-pull-requests-limit: 5
+    # major가 개별 PR로 갈라지므로 한도를 올린다
+    open-pull-requests-limit: 10
     groups:
       next:
         patterns: ["next", "@next/*", "react", "react-dom", "eslint-config-next"]
+        update-types: ["minor", "patch"]
+      # major는 그룹에서 빼 개별 PR로 받는다. 한 PR에 major가 여러 개 묶이면
+      # 어느 패키지가 CI를 깼는지 분리할 수 없고, 되돌리기도 전부-아니면-전무가 된다.
       dev-tooling:
         dependency-type: development
         patterns: ["*"]
+        update-types: ["minor", "patch"]
     commit-message:
       prefix: chore(deps)
 
