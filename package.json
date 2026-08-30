@@ -19,7 +19,7 @@
     "build:visual": "cross-env NEXT_PUBLIC_VISUAL_TEST=1 next build",
     "check:chunks": "node scripts/check-demo-chunks.mjs",
     "perf:lhci": "pnpm build && lhci autorun",
-    "test:e2e:docker": "docker run --rm -it -v \"$PWD\":/work -v portfolio-site-node-modules:/work/node_modules -w /work -e CI=1 mcr.microsoft.com/playwright:v1.57.0-noble bash -lc 'corepack enable && pnpm install --frozen-lockfile && pnpm test:e2e'"
+    "test:e2e:docker": "docker run --rm -it -v \"$PWD\":/work -v portfolio-site-node-modules:/work/node_modules -w /work -e CI=1 mcr.microsoft.com/playwright:v1.62.1-noble bash -lc 'corepack enable && pnpm install --frozen-lockfile && pnpm test:e2e'"
   },
   "dependencies": {
     "@next/mdx": "^16.3.3",
