@@ -19,7 +19,7 @@
     "build:visual": "cross-env NEXT_PUBLIC_VISUAL_TEST=1 next build",
     "check:chunks": "node scripts/check-demo-chunks.mjs",
     "perf:lhci": "pnpm build && lhci autorun",
-    "test:e2e:docker": "docker run --rm -it -v \"$PWD\":/work -v portfolio-site-node-modules:/work/node_modules -w /work -e CI=1 mcr.microsoft.com/playwright:v1.57.0-noble bash -lc 'corepack enable && pnpm install --frozen-lockfile && pnpm test:e2e'"
+    "test:e2e:docker": "docker run --rm -it -v \"$PWD\":/work -v portfolio-site-node-modules:/work/node_modules -w /work -e CI=1 mcr.microsoft.com/playwright:v1.62.1-noble bash -lc 'corepack enable && pnpm install --frozen-lockfile && pnpm test:e2e'"
   },
   "dependencies": {
     "@next/mdx": "^16.3.3",
@@ -38,7 +38,7 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/rollup": "^3.1.1",
     "@next/eslint-plugin-next": "16.3.3",
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.62.1",
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "^16.3.2",
     "@types/mdx": "^2.0.14",
@@ -50,7 +50,7 @@
     "eslint": "^9.39.2",
     "jsdom": "^29.1.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0",
-    "vitest": "^4.1.8"
+    "typescript-eslint": "^8.68.0",
+    "vitest": "^4.1.11"
   }
 }
