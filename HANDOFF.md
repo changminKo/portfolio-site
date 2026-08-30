@@ -15,10 +15,10 @@
 
 ## 구현 결과
 
-공개 라우트 7개: 홈 + `/work/[slug]` 6개. 전부 정적 생성.
+공개 라우트 8개: 홈 + `/work/[slug]` 7개. 전부 정적 생성.
 
-케이스스터디 6개 (문제 → 행동 → 성과):
-`webview-freeze`, `traffic-spike`, `vue-next-migration`, `epub-comic-viewer`, `ai-workflow`, `isr-redis-cachehandler-poc`
+케이스스터디 7개 (문제 → 행동 → 성과):
+`webview-freeze`, `traffic-spike`, `vue-next-migration`, `epub-comic-viewer`, `ai-workflow`, `isr-redis-cachehandler-poc`, `moi-paper-trading`
 
 라이브 데모 2개 (각각 독립 비동기 청크, 홈 번들에서 배제):
 
@@ -69,12 +69,22 @@
 - `isr-redis-cachehandler-poc.mdx` — 판단 매트릭스를 PoC 실측 제약(쿠키 의존 캐시 적중률, Pages Router 제어 범위) 중심으로 다시 짰다. 판단 기준 문장("이득이 운영 복잡도와 장애 전파 범위를 상쇄할 만큼 크지 않다면 도입하지 않는다")도 구성한 것이다.
 - 각 사례 성과 섹션 마지막의 한 문장 회고 6개는 모두 구성한 해석이다. 본인 말투가 아니면 어색하게 읽힌다.
 
+## 2026-08-30 추가 — Moi 사례
+
+개인 프로젝트 `moi-paper-trading`(https://moi-app.duckdns.org)을 7번째 케이스스터디로 추가했다. 서술 각도는 "AI 워크플로우 실증" — 팀 표준(`ai-workflow`)이 안전망 없는 단독 시스템에서도 버티는지 확인한 사례로 배치했다.
+
+- 스키마의 6개 고정을 `WORK_SLUGS.length` 기반으로 일반화했다. UI 문구("N개 사례 모두 보기")도 상수에서 파생한다. `WorkBento` 제목의 "일곱 장면"만 리터럴이다.
+- `WorkMeta`에 선택 필드 `liveUrl`을 추가했다. 있으면 홈 카드에 `라이브 운영 중` 배지, 상세 헤더에 새 탭 링크가 붙는다.
+- 본문 수치는 저장소 실측이다: 2026-08-22~08-30, 커밋 206개, TS/TSX 약 54.8k줄, 테스트 파일 101개, 게이트 9종. 릴리스 판정이 `BLOCKED`인 것도 사실 그대로 적었다.
+- **시각회귀 기준선 미갱신.** 홈 카드가 7개가 되고 `/work/moi-paper-trading` 6장이 새로 필요하다. PR에 `update-snapshots` 라벨을 붙여 Linux 이미지에서 재생성해야 CI가 그린이 된다.
+
 ## 남은 일
 
-1. **공개 결정** — 지금은 Vercel Deployment Protection(SSO)이 사이트를 막고 있어 본인만 볼 수 있다. 공개하려면 https://vercel.com/rhckdals123-8713s-projects/portfolio-site/settings/deployment-protection 에서 Vercel Authentication을 Disabled 로 바꾼다.
-2. **배포 후 Lighthouse 실측** — 프리뷰/프로덕션 URL에 모바일·냉 캐시 3회로 LCP·CLS·INP를 측정해 판정한다.
-3. **GitHub Actions `quality` 워크플로 그린 확인** + `perf:lhci` 리포트 수치 검토(비차단이라 실패하지 않지만 볼 가치가 있다).
-4. Vercel 환경변수에 `NEXT_PUBLIC_VISUAL_TEST` 를 설정하지 않는다 — 시각회귀 전용이다.
+1. **시각 스냅샷 재생성** — 위 Moi 사례 추가분. `update-snapshots` 라벨.
+2. **공개 결정** — 지금은 Vercel Deployment Protection(SSO)이 사이트를 막고 있어 본인만 볼 수 있다. 공개하려면 https://vercel.com/rhckdals123-8713s-projects/portfolio-site/settings/deployment-protection 에서 Vercel Authentication을 Disabled 로 바꾼다.
+3. **배포 후 Lighthouse 실측** — 프리뷰/프로덕션 URL에 모바일·냉 캐시 3회로 LCP·CLS·INP를 측정해 판정한다.
+4. **GitHub Actions `quality` 워크플로 그린 확인** + `perf:lhci` 리포트 수치 검토(비차단이라 실패하지 않지만 볼 가치가 있다).
+5. Vercel 환경변수에 `NEXT_PUBLIC_VISUAL_TEST` 를 설정하지 않는다 — 시각회귀 전용이다.
 
 ## 알려진 갭
 

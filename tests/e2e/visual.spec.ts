@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 const routes = [
   ["home", "/"], ["webview-freeze", "/work/webview-freeze"], ["traffic-spike", "/work/traffic-spike"],
   ["vue-next-migration", "/work/vue-next-migration"], ["epub-comic-viewer", "/work/epub-comic-viewer"],
-  ["ai-workflow", "/work/ai-workflow"], ["isr-redis", "/work/isr-redis-cachehandler-poc"],
+  ["ai-workflow", "/work/ai-workflow"], ["isr-redis", "/work/isr-redis-cachehandler-poc"], ["moi-paper-trading", "/work/moi-paper-trading"],
 ] as const;
 const viewports = [["mobile", 320, 800], ["tablet", 768, 1024], ["desktop", 1440, 1000]] as const;
 const themes = ["light", "dark"] as const;

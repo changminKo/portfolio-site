@@ -25,6 +25,16 @@
 }
 
 .header > a::before { content: "←"; }
+
+.liveLink {
+  margin-top: var(--space-3);
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.85rem;
+}
+
+.header > a.liveLink::before { content: "↗"; }
 .header > a:hover { color: var(--accent); }
 
 /* ── 성과 지표 ──────────────────────────────────────────── */
